@@ -3,11 +3,10 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 
-// When deployed at swen-univaq.github.io/website/, base must be '/website'.
-// When deployed at custom domain swen.disim.univaq.it, base must be '/'.
-// Toggle via env var SITE_BASE if needed, default assumes GitHub Pages subpath.
-const BASE = process.env.SITE_BASE ?? '/website';
-const SITE = process.env.SITE_URL ?? 'https://swen-univaq.github.io';
+// Custom domain swen.disim.univaq.it is active → base is '/'.
+// Fallback to '/website' only if SITE_BASE env var is set explicitly (e.g. for staging previews).
+const BASE = process.env.SITE_BASE ?? '/';
+const SITE = process.env.SITE_URL ?? 'https://swen.disim.univaq.it';
 
 export default defineConfig({
   site: SITE,
