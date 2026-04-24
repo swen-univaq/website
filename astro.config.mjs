@@ -3,10 +3,11 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 
-// Custom domain swen.disim.univaq.it is active → base is '/'.
-// Fallback to '/website' only if SITE_BASE env var is set explicitly (e.g. for staging previews).
-const BASE = process.env.SITE_BASE ?? '/';
-const SITE = process.env.SITE_URL ?? 'https://swen.disim.univaq.it';
+// WIP: custom domain swen.disim.univaq.it pending DNS fix at DISIM IT.
+// Until the CNAME is corrected with trailing dot, we stay on swen-univaq.github.io/website/.
+// When DNS is ready: swap the defaults below to '/' and 'https://swen.disim.univaq.it'.
+const BASE = process.env.SITE_BASE ?? '/website';
+const SITE = process.env.SITE_URL ?? 'https://swen-univaq.github.io';
 
 export default defineConfig({
   site: SITE,
