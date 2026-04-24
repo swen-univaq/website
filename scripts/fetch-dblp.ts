@@ -17,19 +17,49 @@ import { XMLParser } from 'fast-xml-parser';
 const OUT_DIR = resolve(process.cwd(), 'src/data/generated');
 mkdirSync(OUT_DIR, { recursive: true });
 
-/* ----- Peer-reviewed venue whitelist ----- */
+/* ----- Peer-reviewed venue whitelist -----
+ * DBLP returns abbreviated journal names (e.g. "Softw. Syst. Model." for SoSyM),
+ * so match against both the abbreviation and the full-name form.
+ */
 const JOURNAL_WHITELIST = [
-  'sosym', 'tse', 'tosem', 'emse', 'jss', 'ist', 'scp', 'softwarex', 'spe',
-  'ieeesoftware', 'ieee software', 'computer', 'ase', 'ese', 'cola',
-  'jcs', 'scico', 'software and systems modeling', 'empirical software engineering',
-  'journal of systems and software', 'information and software technology',
-  'journal of computer languages', 'transactions on software engineering',
-  'transactions on software engineering and methodology',
+  // SoSyM
+  'softw. syst. model.', 'software and systems modeling', 'sosym',
+  // TSE
+  'ieee trans. software eng.', 'ieee trans. softw. eng.', 'transactions on software engineering',
+  // TOSEM
+  'acm trans. softw. eng. methodol.', 'trans. softw. eng. methodol.', 'transactions on software engineering and methodology',
+  // EMSE
+  'empir. softw. eng.', 'empirical software engineering',
+  // JSS
+  'j. syst. softw.', 'journal of systems and software',
+  // IST
+  'inf. softw. technol.', 'information and software technology',
+  // SCP
+  'sci. comput. program.', 'science of computer programming',
+  // SoftwareX
+  'softwarex',
+  // SPE
+  'softw. pract. exp.', 'software practice and experience', 'software: practice and experience',
+  // IEEE Software
+  'ieee softw.', 'ieee software',
+  // Computer (IEEE)
+  'computer',
+  // Automated Software Engineering Journal
+  'autom. softw. eng.', 'automated software engineering',
+  // Journal of Computer Languages
+  'j. comput. lang.', 'journal of computer languages',
+  // Journal of Object Technology
+  'j. object technol.', 'journal of object technology',
+  // Systems Engineering (Wiley)
+  'syst. eng.', 'systems engineering',
 ];
 const CONFERENCE_WHITELIST = [
   'icse', 'fse', 'ase', 'issta', 'icsme', 'saner', 'models', 'ecmfa', 'sle', 'gpce',
   'splc', 'icsa', 'esem', 'msr', 'icse-companion', 'icpc', 'wcre', 'compsac',
   'quatic', 'seaa', 'euromicro', 'sigsoft',
+  // Added: commonly referenced SE venues
+  'icmt', 'ease', 'sbes', 'scam', 'profes', 'refsq', 'caise', 're ',
+  'modelsward', 'modellierung', 'staf', 'msr',
 ];
 
 function isWhitelistedJournal(venue: string): boolean {
