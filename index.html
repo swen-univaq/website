@@ -1,0 +1,1058 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SWEN — Software Engineering Research Group · University of L'Aquila</title>
+<meta name="description" content="SWEN is the Software Engineering Research Group at DISIM, University of L'Aquila. 36 researchers across model-driven engineering, performance, architecture, and quality. 4 labs, 9 active grants.">
+<link rel="icon" type="image/png" href="website-logo.png">
+<meta property="og:title" content="SWEN — Software Engineering Research Group">
+<meta property="og:description" content="Software Engineering Research Group at DISIM, University of L'Aquila — MODES, SPENCER, SoSy, FrAmeLab. Model-driven engineering, performance, architecture, quality.">
+<meta property="og:image" content="website-logo.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<style type="text/tailwindcss">
+  @theme {
+    --font-serif: "Fraunces", Georgia, serif;
+    --font-sans: "Inter", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+    --color-ink: #1a2332;
+    --color-ink-soft: #44546b;
+    --color-ink-mute: #7b8699;
+    --color-paper: #ffffff;
+    --color-cream: #f5f3ef;
+    --color-rule: #e5e1d8;
+    --color-brand-magenta: #9A1A5A;
+    --color-brand-pink: #E91E5A;
+    --color-brand-orange: #F26A1F;
+    --color-brand-amber: #FCB51A;
+    --color-accent: #9A1A5A;
+  }
+  body { font-family: var(--font-sans); color: var(--color-ink); background: var(--color-paper); }
+  h1, h2, h3, h4 { font-family: var(--font-serif); letter-spacing: -0.015em; font-variation-settings: "opsz" 72; }
+  .display { font-family: var(--font-serif); letter-spacing: -0.025em; font-weight: 500; font-variation-settings: "opsz" 144; }
+  .display-tight { font-family: var(--font-serif); letter-spacing: -0.03em; font-weight: 600; font-variation-settings: "opsz" 144; }
+  .smallcaps { letter-spacing: 0.18em; text-transform: uppercase; font-size: 0.72rem; font-weight: 600; color: var(--color-ink-mute); }
+  .page { display: none; }
+  .page.active { display: block; }
+  .nav-link { font-weight: 500; }
+  .nav-link.active { color: var(--color-brand-magenta); border-bottom-color: var(--color-brand-magenta); }
+  .rule { border-top: 1px solid var(--color-rule); }
+  .avatar { background: linear-gradient(135deg, var(--color-cream), #ebe6db); color: var(--color-ink-soft); font-family: var(--font-serif); font-weight: 500; display: flex; align-items: center; justify-content: center; border: 1px solid var(--color-rule); }
+  a { transition: color 140ms; }
+  .gradient-text { background: linear-gradient(95deg, #9A1A5A 0%, #E91E5A 32%, #F26A1F 66%, #FCB51A 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .gradient-bar { background: linear-gradient(95deg, #9A1A5A 0%, #E91E5A 32%, #F26A1F 66%, #FCB51A 100%); }
+  .chip { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.25rem 0.7rem; border-radius: 9999px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+</style>
+</head>
+<body class="min-h-screen antialiased">
+
+<!-- ============ TOPBAR ============ -->
+<header class="sticky top-0 z-40 bg-[var(--color-paper)]/95 backdrop-blur border-b border-[var(--color-rule)]">
+  <div class="gradient-bar h-0.5"></div>
+  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="#home" class="flex items-center gap-4">
+      <img src="website-logo.png" alt="SWEN Research Group" class="h-9 w-auto" />
+      <span class="text-xs text-[var(--color-ink-mute)] hidden md:inline border-l border-[var(--color-rule)] pl-4">Software Engineering · DISIM · Università dell'Aquila</span>
+    </a>
+    <nav class="flex items-center gap-7 text-sm">
+      <a href="#home" class="nav-link pb-1 border-b-2 border-transparent hover:text-[var(--color-accent)]">Home</a>
+      <a href="#research" class="nav-link pb-1 border-b-2 border-transparent hover:text-[var(--color-accent)]">Research</a>
+      <a href="#people" class="nav-link pb-1 border-b-2 border-transparent hover:text-[var(--color-accent)]">People</a>
+      <a href="#software" class="nav-link pb-1 border-b-2 border-transparent hover:text-[var(--color-accent)]">Software</a>
+      <a href="#projects" class="nav-link pb-1 border-b-2 border-transparent hover:text-[var(--color-accent)]">Projects</a>
+      <a href="#publications" class="nav-link pb-1 border-b-2 border-transparent hover:text-[var(--color-accent)]">Publications</a>
+      <a href="#news" class="nav-link pb-1 border-b-2 border-transparent hover:text-[var(--color-accent)]">News</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HOME ============ -->
+<main id="page-home" class="page active">
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6 pt-24 pb-28 relative z-10">
+      <div class="max-w-4xl">
+        <div class="flex items-center gap-3 mb-10">
+          <span class="gradient-bar h-1 w-10 rounded-full"></span>
+          <span class="smallcaps">Software Engineering · DISIM · Università dell'Aquila</span>
+        </div>
+        <h1 class="display-tight text-5xl md:text-7xl leading-[0.98] mb-10 tracking-tight">
+          We <span class="gradient-text">design</span>, <span class="gradient-text">build</span>, and <span class="gradient-text">reason about</span> software systems that perform, adapt, and last.
+        </h1>
+        <p class="text-lg text-[var(--color-ink-soft)] max-w-2xl leading-relaxed">
+          SWEN brings together <strong class="text-[var(--color-ink)]">36 researchers</strong> across model-driven engineering,
+          software architecture, performance, and quality. We publish at top venues, coordinate national projects,
+          ship open-source software, and train the next generation of software engineers in L'Aquila.
+        </p>
+        <div class="mt-12 flex items-center gap-4 flex-wrap">
+          <a href="#research" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-ink)] text-white text-sm font-medium hover:bg-[var(--color-brand-magenta)] transition-colors">
+            Explore our research
+            <span aria-hidden="true">→</span>
+          </a>
+          <a href="#software" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[var(--color-rule)] text-sm font-medium hover:border-[var(--color-ink)]">
+            Our software
+          </a>
+          <a href="#positions" class="inline-flex items-center gap-2 text-sm text-[var(--color-ink-mute)] hover:text-[var(--color-ink)] ml-2">
+            Join us →
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- decorative gradient corner -->
+    <div class="absolute -top-20 -right-20 w-96 h-96 rounded-full opacity-[0.08] blur-3xl bg-gradient-to-br from-[var(--color-brand-magenta)] via-[var(--color-brand-orange)] to-[var(--color-brand-amber)] pointer-events-none"></div>
+  </section>
+
+  <!-- Key facts strip -->
+  <section class="border-y border-[var(--color-rule)]">
+    <div class="max-w-6xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div>
+        <div class="flex items-baseline gap-2">
+          <div class="display text-5xl">36</div>
+          <span class="h-2 w-2 rounded-full bg-[var(--color-brand-magenta)]"></span>
+        </div>
+        <div class="smallcaps mt-3">Researchers</div>
+      </div>
+      <div>
+        <div class="flex items-baseline gap-2">
+          <div class="display text-5xl">4</div>
+          <span class="h-2 w-2 rounded-full bg-[var(--color-brand-pink)]"></span>
+        </div>
+        <div class="smallcaps mt-3">Research Labs</div>
+      </div>
+      <div>
+        <div class="flex items-baseline gap-2">
+          <div class="display text-5xl">9</div>
+          <span class="h-2 w-2 rounded-full bg-[var(--color-brand-orange)]"></span>
+        </div>
+        <div class="smallcaps mt-3">Active Grants</div>
+      </div>
+      <div>
+        <div class="flex items-baseline gap-2">
+          <div class="display text-5xl">15</div>
+          <span class="h-2 w-2 rounded-full bg-[var(--color-brand-amber)]"></span>
+        </div>
+        <div class="smallcaps mt-3">PhD Students</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Labs -->
+  <section class="max-w-6xl mx-auto px-6 py-28">
+    <div class="flex items-end justify-between mb-12 flex-wrap gap-4">
+      <div>
+        <p class="smallcaps mb-3">Research Labs</p>
+        <h2 class="display text-5xl">Four labs, one group.</h2>
+      </div>
+      <a href="#research" class="text-sm font-medium hover:text-[var(--color-brand-magenta)]">All research lines →</a>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <a href="#lab-modes" class="group relative block p-7 rounded-2xl border border-[var(--color-rule)] hover:border-[var(--color-brand-magenta)] hover:-translate-y-1 transition-all bg-white overflow-hidden">
+        <span class="absolute top-0 left-0 right-0 h-1 bg-[var(--color-brand-magenta)]"></span>
+        <div class="chip mt-2 mb-5" style="background: color-mix(in oklch, var(--color-brand-magenta) 12%, white); color: var(--color-brand-magenta);">MODES Lab</div>
+        <h3 class="display text-xl mb-3 leading-tight">Model-Driven Engineering & Software Mining</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed mb-8">Intelligent model assistants combining MDE, software mining, and modern machine learning.</p>
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-[var(--color-ink-mute)]">Lead: Juri Di Rocco</span>
+          <span class="text-[var(--color-brand-magenta)] opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+        </div>
+      </a>
+      <a href="#lab-spencer" class="group relative block p-7 rounded-2xl border border-[var(--color-rule)] hover:border-[var(--color-brand-pink)] hover:-translate-y-1 transition-all bg-white overflow-hidden">
+        <span class="absolute top-0 left-0 right-0 h-1 bg-[var(--color-brand-pink)]"></span>
+        <div class="chip mt-2 mb-5" style="background: color-mix(in oklch, var(--color-brand-pink) 12%, white); color: var(--color-brand-pink);">SPENCER Lab</div>
+        <h3 class="display text-xl mb-3 leading-tight">Software Performance Engineering</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed mb-8">Performance and reliability of software systems, via search-based and automated techniques.</p>
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-[var(--color-ink-mute)]">Head: Vittorio Cortellessa</span>
+          <span class="text-[var(--color-brand-pink)] opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+        </div>
+      </a>
+      <a href="#lab-sosy" class="group relative block p-7 rounded-2xl border border-[var(--color-rule)] hover:border-[var(--color-brand-orange)] hover:-translate-y-1 transition-all bg-white overflow-hidden">
+        <span class="absolute top-0 left-0 right-0 h-1 bg-[var(--color-brand-orange)]"></span>
+        <div class="chip mt-2 mb-5" style="background: color-mix(in oklch, var(--color-brand-orange) 14%, white); color: var(--color-brand-orange);">SoSy Group</div>
+        <h3 class="display text-xl mb-3 leading-tight">Software Synthesis & Architecture</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed mb-8">Automated synthesis, software architectures, and adaptive systems.</p>
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-[var(--color-ink-mute)]">Heads: Autili, Tivoli</span>
+          <span class="text-[var(--color-brand-orange)] opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+        </div>
+      </a>
+      <a href="#lab-framelab" class="group relative block p-7 rounded-2xl border border-[var(--color-rule)] hover:border-[var(--color-brand-amber)] hover:-translate-y-1 transition-all bg-white overflow-hidden">
+        <span class="absolute top-0 left-0 right-0 h-1 bg-[var(--color-brand-amber)]"></span>
+        <div class="chip mt-2 mb-5" style="background: color-mix(in oklch, var(--color-brand-amber) 18%, white); color: #A06B00;">FrAmeLab</div>
+        <h3 class="display text-xl mb-3 leading-tight">Quality, Resilience & Green SE</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed mb-8">Software architecture with quality assurance, resilience, and sustainability.</p>
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-[var(--color-ink-mute)]">Head: Henry Muccini</span>
+          <span style="color:#A06B00" class="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Software -->
+  <section class="max-w-6xl mx-auto px-6 py-24 border-t border-[var(--color-rule)]">
+    <div class="flex items-end justify-between mb-10">
+      <div>
+        <p class="smallcaps mb-3">Software & Tools</p>
+        <h2 class="display text-4xl">Research we ship</h2>
+        <p class="text-[var(--color-ink-soft)] max-w-xl mt-4">Academic software maintained by the group — open-source frameworks, tools, and libraries used in research and teaching worldwide.</p>
+      </div>
+      <a href="#software" class="text-sm text-[var(--color-accent)] hover:underline underline-offset-4">All software →</a>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-0 border-t border-[var(--color-rule)]">
+      <a href="#software" class="group p-6 border-b lg:border-r border-[var(--color-rule)] hover:bg-[var(--color-cream)] flex flex-col">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="inline-block w-2 h-2 rounded-full bg-[var(--color-accent)]"></span>
+          <span class="smallcaps text-xs">MDE Framework</span>
+        </div>
+        <h3 class="font-serif text-xl mb-2">[Software 1]</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">One-line description of what this tool does and who uses it.</p>
+        <div class="flex items-center gap-4 mt-6 text-xs text-[var(--color-ink-mute)]">
+          <span class="font-mono">TypeScript</span>
+          <span>★ 000</span>
+          <span>GitHub ↗</span>
+        </div>
+      </a>
+      <a href="#software" class="group p-6 border-b lg:border-r border-[var(--color-rule)] hover:bg-[var(--color-cream)] flex flex-col">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="inline-block w-2 h-2 rounded-full bg-[var(--color-accent)]"></span>
+          <span class="smallcaps text-xs">Library</span>
+        </div>
+        <h3 class="font-serif text-xl mb-2">[Software 2]</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Description goes here.</p>
+        <div class="flex items-center gap-4 mt-6 text-xs text-[var(--color-ink-mute)]">
+          <span class="font-mono">Java</span>
+          <span>★ 000</span>
+          <span>GitHub ↗</span>
+        </div>
+      </a>
+      <a href="#software" class="group p-6 border-b lg:border-r border-[var(--color-rule)] hover:bg-[var(--color-cream)] flex flex-col">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="inline-block w-2 h-2 rounded-full bg-[var(--color-accent)]"></span>
+          <span class="smallcaps text-xs">Dataset</span>
+        </div>
+        <h3 class="font-serif text-xl mb-2">[Software 3]</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Description goes here.</p>
+        <div class="flex items-center gap-4 mt-6 text-xs text-[var(--color-ink-mute)]">
+          <span class="font-mono">Python</span>
+          <span>★ 000</span>
+          <span>GitHub ↗</span>
+        </div>
+      </a>
+      <a href="#software" class="group p-6 border-b border-[var(--color-rule)] hover:bg-[var(--color-cream)] flex flex-col">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="inline-block w-2 h-2 rounded-full bg-[var(--color-accent)]"></span>
+          <span class="smallcaps text-xs">CLI Tool</span>
+        </div>
+        <h3 class="font-serif text-xl mb-2">[Software 4]</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Description goes here.</p>
+        <div class="flex items-center gap-4 mt-6 text-xs text-[var(--color-ink-mute)]">
+          <span class="font-mono">Rust</span>
+          <span>★ 000</span>
+          <span>GitHub ↗</span>
+        </div>
+      </a>
+    </div>
+    <p class="mt-6 text-xs text-[var(--color-ink-mute)] italic">Placeholder cards — content to be provided in v2 of the mockup.</p>
+  </section>
+
+  <!-- Featured publications -->
+  <section class="bg-[var(--color-cream)] border-y border-[var(--color-rule)]">
+    <div class="max-w-6xl mx-auto px-6 py-20">
+      <div class="flex items-end justify-between mb-10">
+        <div>
+          <p class="smallcaps mb-3">Recent Publications</p>
+          <h2 class="display text-4xl">Selected output</h2>
+        </div>
+        <a href="#publications" class="text-sm text-[var(--color-accent)] hover:underline underline-offset-4">All publications →</a>
+      </div>
+      <ul class="space-y-0 border-t border-[var(--color-rule)]">
+        <li class="py-6 border-b border-[var(--color-rule)] flex gap-6">
+          <div class="smallcaps text-[var(--color-ink-mute)] flex-shrink-0 w-16 pt-1">2024</div>
+          <div class="flex-1">
+            <a href="https://doi.org/10.1145/3691620.3695058" class="block font-serif text-lg font-medium hover:text-[var(--color-accent)]">Towards Synthetic Trace Generation of Modeling Operations using In-Context Learning Approach</a>
+            <p class="text-sm text-[var(--color-ink-mute)] mt-2">V. Muttillo, C. Di Sipio, R. Rubei, L. Berardinelli, M. Dehghani</p>
+            <p class="text-xs text-[var(--color-ink-mute)] mt-1">ASE 2024 · Automated Software Engineering</p>
+          </div>
+        </li>
+        <li class="py-6 border-b border-[var(--color-rule)] flex gap-6">
+          <div class="smallcaps text-[var(--color-ink-mute)] flex-shrink-0 w-16 pt-1">2024</div>
+          <div class="flex-1">
+            <a href="https://doi.org/10.1109/ICSA59870.2024.00012" class="block font-serif text-lg font-medium hover:text-[var(--color-accent)]">Exploring Sustainable Alternatives for the Deployment of Microservices Architectures in the Cloud</a>
+            <p class="text-sm text-[var(--color-ink-mute)] mt-2">V. Cortellessa, D. Di Pompeo, M. Tucci</p>
+            <p class="text-xs text-[var(--color-ink-mute)] mt-1">ICSA 2024 · IEEE International Conference on Software Architecture</p>
+          </div>
+        </li>
+        <li class="py-6 border-b border-[var(--color-rule)] flex gap-6">
+          <div class="smallcaps text-[var(--color-ink-mute)] flex-shrink-0 w-16 pt-1">2023</div>
+          <div class="flex-1">
+            <a href="https://doi.org/10.1007/s10664-022-10247-x" class="block font-serif text-lg font-medium hover:text-[var(--color-accent)]">Towards effective assessment of steady state performance in Java software: are we there yet?</a>
+            <p class="text-sm text-[var(--color-ink-mute)] mt-2">L. Traini, V. Cortellessa, D. Di Pompeo, M. Tucci</p>
+            <p class="text-xs text-[var(--color-ink-mute)] mt-1">Empirical Software Engineering Journal</p>
+          </div>
+        </li>
+      </ul>
+      <p class="mt-6 text-xs text-[var(--color-ink-mute)] italic">Placeholder — the full list will be auto-fetched from DBLP per author, filtered to peer-reviewed journals and conferences.</p>
+    </div>
+  </section>
+
+  <!-- News -->
+  <section class="max-w-6xl mx-auto px-6 py-28">
+    <div class="flex items-end justify-between mb-12 flex-wrap gap-4">
+      <div>
+        <p class="smallcaps mb-3">News</p>
+        <h2 class="display text-5xl">Latest from the group.</h2>
+      </div>
+      <a href="#news" class="text-sm font-medium hover:text-[var(--color-brand-magenta)]">All news →</a>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <article class="p-7 rounded-2xl bg-white border border-[var(--color-rule)] hover:border-[var(--color-brand-magenta)] transition-colors">
+        <span class="chip mb-5" style="background:color-mix(in oklch, var(--color-brand-magenta) 12%, white); color: var(--color-brand-magenta);">Paper · Apr 2026</span>
+        <h3 class="display text-xl mb-3 leading-snug">Two SWEN papers accepted at ICSE 2026</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">Work from SPENCER Lab and the MDE group will be presented in Lisbon in May.</p>
+      </article>
+      <article class="p-7 rounded-2xl bg-white border border-[var(--color-rule)] hover:border-[var(--color-brand-orange)] transition-colors">
+        <span class="chip mb-5" style="background:color-mix(in oklch, var(--color-brand-orange) 14%, white); color: var(--color-brand-orange);">Event · Mar 2026</span>
+        <h3 class="display text-xl mb-3 leading-snug">SWEN Retreat 2026 in Roccaraso</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">Three days of cross-lab sessions on strategy and new PhD projects.</p>
+      </article>
+      <article class="p-7 rounded-2xl bg-white border border-[var(--color-rule)] hover:border-[var(--color-brand-amber)] transition-colors">
+        <span class="chip mb-5" style="background:color-mix(in oklch, var(--color-brand-amber) 18%, white); color: #A06B00;">PhD · Feb 2026</span>
+        <h3 class="display text-xl mb-3 leading-snug">XL Cycle PhD positions now closed</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">One new student joining in November on model-driven engineering topics.</p>
+      </article>
+    </div>
+    <p class="mt-6 text-xs text-[var(--color-ink-mute)] italic">Placeholder — real content will be maintained in Notion.</p>
+  </section>
+
+  <!-- Projects -->
+  <section class="bg-[var(--color-cream)] border-y border-[var(--color-rule)]">
+    <div class="max-w-6xl mx-auto px-6 py-24">
+      <div class="flex items-end justify-between mb-12 flex-wrap gap-4">
+        <div>
+          <p class="smallcaps mb-3">Active Projects</p>
+          <h2 class="display text-5xl">Seven ongoing grants.</h2>
+        </div>
+        <a href="#projects" class="text-sm font-medium hover:text-[var(--color-brand-magenta)]">All projects →</a>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="#project-recharge" class="group block p-6 rounded-xl bg-white border border-[var(--color-rule)] hover:border-[var(--color-ink)] transition-all">
+          <div class="flex items-center justify-between mb-4">
+            <span class="chip" style="background:color-mix(in oklch, var(--color-brand-magenta) 12%, white); color: var(--color-brand-magenta);">PNRR · RECHARGE</span>
+            <span class="text-xs text-[var(--color-ink-mute)]">23–25</span>
+          </div>
+          <h3 class="display text-lg leading-snug">Automated performance testing in CI/CD pipelines</h3>
+        </a>
+        <a href="#projects" class="group block p-6 rounded-xl bg-white border border-[var(--color-rule)] hover:border-[var(--color-ink)] transition-all">
+          <div class="flex items-center justify-between mb-4">
+            <span class="chip" style="background:color-mix(in oklch, var(--color-brand-orange) 14%, white); color: var(--color-brand-orange);">PRIN · TRex-SE</span>
+            <span class="text-xs text-[var(--color-ink-mute)]">22–25</span>
+          </div>
+          <h3 class="display text-lg leading-snug">Trustworthy recommenders for software engineers</h3>
+        </a>
+        <a href="#projects" class="group block p-6 rounded-xl bg-white border border-[var(--color-rule)] hover:border-[var(--color-ink)] transition-all">
+          <div class="flex items-center justify-between mb-4">
+            <span class="chip" style="background:color-mix(in oklch, var(--color-brand-amber) 18%, white); color: #A06B00;">PNRR · FRINGE</span>
+            <span class="text-xs text-[var(--color-ink-mute)]">23–25</span>
+          </div>
+          <h3 class="display text-lg leading-snug">Fairness engineering for ML-intensive systems</h3>
+        </a>
+        <a href="#projects" class="group block p-6 rounded-xl bg-white border border-[var(--color-rule)] hover:border-[var(--color-ink)] transition-all">
+          <div class="flex items-center justify-between mb-4">
+            <span class="chip" style="background:color-mix(in oklch, var(--color-brand-pink) 12%, white); color: var(--color-brand-pink);">PNRR · HALO</span>
+            <span class="text-xs text-[var(--color-ink-mute)]">23–25</span>
+          </div>
+          <h3 class="display text-lg leading-snug">Human-aligned autonomy of AI systems</h3>
+        </a>
+        <a href="#projects" class="group block p-6 rounded-xl bg-white border border-[var(--color-rule)] hover:border-[var(--color-ink)] transition-all">
+          <div class="flex items-center justify-between mb-4">
+            <span class="chip" style="background:color-mix(in oklch, var(--color-brand-magenta) 12%, white); color: var(--color-brand-magenta);">PRIN · BeT</span>
+            <span class="text-xs text-[var(--color-ink-mute)]">23–25</span>
+          </div>
+          <h3 class="display text-lg leading-snug">Behavior-enabled IoT</h3>
+        </a>
+        <a href="#projects" class="group block p-6 rounded-xl bg-white border border-[var(--color-rule)] hover:border-[var(--color-ink)] transition-all">
+          <div class="flex items-center justify-between mb-4">
+            <span class="chip" style="background:color-mix(in oklch, var(--color-brand-orange) 14%, white); color: var(--color-brand-orange);">PRIN · EMELIOT</span>
+            <span class="text-xs text-[var(--color-ink-mute)]">22–25</span>
+          </div>
+          <h3 class="display text-lg leading-snug">ML-intensive IoT systems</h3>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ RESEARCH ============ -->
+<main id="page-research" class="page">
+  <section class="max-w-6xl mx-auto px-6 pt-16 pb-20">
+    <p class="smallcaps mb-6">Research</p>
+    <h1 class="display text-5xl mb-8 max-w-3xl">Research at SWEN spans the full lifecycle of software systems.</h1>
+    <p class="text-lg text-[var(--color-ink-soft)] max-w-3xl leading-relaxed">We work across methods (model-driven, search-based, empirical), concerns (performance, quality, sustainability), and domains (cloud, IoT, AI-intensive systems). Our research is organised across four labs that complement each other methodologically and thematically.</p>
+  </section>
+  <section class="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-6">
+    <div class="p-8 rounded-2xl border border-[var(--color-rule)] bg-white relative overflow-hidden">
+      <span class="absolute top-0 left-0 right-0 h-1 bg-[var(--color-brand-magenta)]"></span>
+      <p class="smallcaps mb-3" style="color:var(--color-brand-magenta)">MODES Lab</p>
+      <h2 class="display text-2xl mb-4">Model-Driven Engineering & Software Mining</h2>
+      <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed mb-4">Intelligent 'model assistants' that combine MDE techniques with software-mining and modern machine learning. Recommender systems for software engineering, LLMs applied to modeling.</p>
+      <p class="text-xs text-[var(--color-ink-mute)]">Lead: J. Di Rocco · with A. Pierantonio, D. Di Ruscio, C. Di Sipio, R. Rubei and others</p>
+    </div>
+    <div class="p-8 rounded-2xl border border-[var(--color-rule)] bg-white relative overflow-hidden">
+      <span class="absolute top-0 left-0 right-0 h-1 bg-[var(--color-brand-pink)]"></span>
+      <p class="smallcaps mb-3" style="color:var(--color-brand-pink)">SPENCER Lab</p>
+      <h2 class="display text-2xl mb-4">Software Performance Engineering</h2>
+      <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">Performance modeling, search-based architectural optimization, microbenchmarking, sustainable deployments.</p>
+    </div>
+    <div class="p-8 rounded-2xl border border-[var(--color-rule)] bg-white relative overflow-hidden">
+      <span class="absolute top-0 left-0 right-0 h-1 bg-[var(--color-brand-orange)]"></span>
+      <p class="smallcaps mb-3" style="color:var(--color-brand-orange)">SoSy Group</p>
+      <h2 class="display text-2xl mb-4">Software Synthesis & Architecture</h2>
+      <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">Automated synthesis of distributed and adaptive software, formal composition, behaviour-enabled systems.</p>
+    </div>
+    <div class="p-8 rounded-2xl border border-[var(--color-rule)] bg-white relative overflow-hidden">
+      <span class="absolute top-0 left-0 right-0 h-1 bg-[var(--color-brand-amber)]"></span>
+      <p class="smallcaps mb-3" style="color:#A06B00">FrAmeLab</p>
+      <h2 class="display text-2xl mb-4">Quality, Resilience, Green SE</h2>
+      <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">Architectural approaches to software quality, dependability, and environmental sustainability.</p>
+    </div>
+  </section>
+</main>
+
+<!-- ============ PEOPLE ============ -->
+<main id="page-people" class="page">
+  <section class="max-w-6xl mx-auto px-6 pt-16 pb-12">
+    <p class="smallcaps mb-6">People</p>
+    <h1 class="display text-5xl mb-4">36 researchers</h1>
+    <p class="text-[var(--color-ink-soft)] max-w-2xl">Full professors, associate professors, assistant professors, postdocs, and doctoral students. Click any name for the individual page (with bio and publications from DBLP).</p>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-6 pb-20">
+
+    <!-- Full Professors -->
+    <div class="border-t border-[var(--color-rule)] py-10">
+      <h2 class="smallcaps mb-6">Full Professors</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+        <div><div class="avatar aspect-[4/5] w-full mb-3 rounded-sm">VC</div><p class="font-serif text-base leading-tight">Vittorio Cortellessa</p><p class="text-xs text-[var(--color-ink-mute)] mt-1">SPENCER Lab</p></div>
+        <div><div class="avatar aspect-[4/5] w-full mb-3 rounded-sm">DR</div><p class="font-serif text-base leading-tight">Davide Di Ruscio</p><p class="text-xs text-[var(--color-ink-mute)] mt-1">MODES Lab</p></div>
+        <div><div class="avatar aspect-[4/5] w-full mb-3 rounded-sm">HM</div><p class="font-serif text-base leading-tight">Henry Muccini</p><p class="text-xs text-[var(--color-ink-mute)] mt-1">FrAmeLab</p></div>
+        <div><div class="avatar aspect-[4/5] w-full mb-3 rounded-sm">AP</div><p class="font-serif text-base leading-tight">Alfonso Pierantonio</p><p class="text-xs text-[var(--color-ink-mute)] mt-1">Coordinator · MODES Lab</p></div>
+        <div><div class="avatar aspect-[4/5] w-full mb-3 rounded-sm">MT</div><p class="font-serif text-base leading-tight">Massimo Tivoli</p><p class="text-xs text-[var(--color-ink-mute)] mt-1">SoSy Group</p></div>
+      </div>
+    </div>
+
+    <!-- Associate Professors -->
+    <div class="border-t border-[var(--color-rule)] py-10">
+      <h2 class="smallcaps mb-6">Associate Professors</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+        <div><div class="avatar aspect-[4/5] w-full mb-3 rounded-sm">MA</div><p class="font-serif text-base leading-tight">Marco Autili</p><p class="text-xs text-[var(--color-ink-mute)] mt-1">SoSy Group</p></div>
+        <div><div class="avatar aspect-[4/5] w-full mb-3 rounded-sm">AM</div><p class="font-serif text-base leading-tight">Antinisca Di Marco</p></div>
+        <div><div class="avatar aspect-[4/5] w-full mb-3 rounded-sm">AB</div><p class="font-serif text-base leading-tight">Antonio Bucchiarone</p></div>
+      </div>
+    </div>
+
+    <!-- Assistant Professors -->
+    <div class="border-t border-[var(--color-rule)] py-10">
+      <h2 class="smallcaps mb-6">Assistant Professors</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+        <div><div class="avatar aspect-[4/5] w-full mb-3 rounded-sm">JD</div><p class="font-serif text-base leading-tight">Juri Di Rocco</p><p class="text-xs text-[var(--color-ink-mute)] mt-1">Lead · MODES Lab</p></div>
+        <div><div class="avatar aspect-[4/5] w-full mb-3 rounded-sm">DP</div><p class="font-serif text-base leading-tight">Daniele Di Pompeo</p><p class="text-xs text-[var(--color-ink-mute)] mt-1">SPENCER Lab</p></div>
+        <div><div class="avatar aspect-[4/5] w-full mb-3 rounded-sm">PN</div><p class="font-serif text-base leading-tight">Phuong Nguyen</p></div>
+        <div><div class="avatar aspect-[4/5] w-full mb-3 rounded-sm">LT</div><p class="font-serif text-base leading-tight">Luca Traini</p><p class="text-xs text-[var(--color-ink-mute)] mt-1">SPENCER Lab</p></div>
+        <div><div class="avatar aspect-[4/5] w-full mb-3 rounded-sm">MT</div><p class="font-serif text-base leading-tight">Michele Tucci</p><p class="text-xs text-[var(--color-ink-mute)] mt-1">SPENCER Lab</p></div>
+        <div><div class="avatar aspect-[4/5] w-full mb-3 rounded-sm">TL</div><p class="font-serif text-base leading-tight">Tiziano Lombardi</p></div>
+      </div>
+    </div>
+
+    <!-- Postdocs -->
+    <div class="border-t border-[var(--color-rule)] py-10">
+      <h2 class="smallcaps mb-6">Postdocs</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6">
+        <div><div class="avatar aspect-square w-full mb-2 rounded-full text-sm">RC</div><p class="text-sm leading-tight">Roberta Capuano</p></div>
+        <div><div class="avatar aspect-square w-full mb-2 rounded-full text-sm">CD</div><p class="text-sm leading-tight">Claudio Di Sipio</p></div>
+        <div><div class="avatar aspect-square w-full mb-2 rounded-full text-sm">RR</div><p class="text-sm leading-tight">Riccardo Rubei</p></div>
+        <div><div class="avatar aspect-square w-full mb-2 rounded-full text-sm">MB</div><p class="text-sm leading-tight">Martin Beseda</p></div>
+        <div><div class="avatar aspect-square w-full mb-2 rounded-full text-sm">MA</div><p class="text-sm leading-tight">Moamin Abughazala</p></div>
+        <div><div class="avatar aspect-square w-full mb-2 rounded-full text-sm">PM</div><p class="text-sm leading-tight">Patrizio Migliarini</p></div>
+        <div><div class="avatar aspect-square w-full mb-2 rounded-full text-sm">NM</div><p class="text-sm leading-tight">Nadeem Q. Mehmood</p></div>
+      </div>
+    </div>
+
+    <!-- PhD Students -->
+    <div class="border-t border-[var(--color-rule)] py-10">
+      <h2 class="smallcaps mb-6">PhD Students</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3 text-sm">
+        <div class="flex justify-between border-b border-[var(--color-rule)] pb-2"><span>Giordano D'Aloisio</span><span class="text-[var(--color-ink-mute)] font-mono text-xs">XXXVII</span></div>
+        <div class="flex justify-between border-b border-[var(--color-rule)] pb-2"><span>Muhammad Imran</span><span class="text-[var(--color-ink-mute)] font-mono text-xs">XXXVII</span></div>
+        <div class="flex justify-between border-b border-[var(--color-rule)] pb-2"><span>Mashal Afzal Memon</span><span class="text-[var(--color-ink-mute)] font-mono text-xs">XXXVII</span></div>
+        <div class="flex justify-between border-b border-[var(--color-rule)] pb-2"><span>Rafiullah Omar</span><span class="text-[var(--color-ink-mute)] font-mono text-xs">XXXVII</span></div>
+        <div class="flex justify-between border-b border-[var(--color-rule)] pb-2"><span>Gizealew A. Dagnaw</span><span class="text-[var(--color-ink-mute)] font-mono text-xs">XXXVIII</span></div>
+        <div class="flex justify-between border-b border-[var(--color-rule)] pb-2"><span>Valentino Di Giosaffatte</span><span class="text-[var(--color-ink-mute)] font-mono text-xs">XXXVIII</span></div>
+        <div class="flex justify-between border-b border-[var(--color-rule)] pb-2"><span>Federico Di Menna</span><span class="text-[var(--color-ink-mute)] font-mono text-xs">XXXVIII</span></div>
+        <div class="flex justify-between border-b border-[var(--color-rule)] pb-2"><span>Payel Patra</span><span class="text-[var(--color-ink-mute)] font-mono text-xs">XXXVIII</span></div>
+        <div class="flex justify-between border-b border-[var(--color-rule)] pb-2"><span>Anjali Santhosh</span><span class="text-[var(--color-ink-mute)] font-mono text-xs">XXXVIII</span></div>
+        <div class="flex justify-between border-b border-[var(--color-rule)] pb-2"><span>Gennaro Zanfardino</span><span class="text-[var(--color-ink-mute)] font-mono text-xs">XXXVIII</span></div>
+        <div class="flex justify-between border-b border-[var(--color-rule)] pb-2"><span>Muhammad Umar Zeshan</span><span class="text-[var(--color-ink-mute)] font-mono text-xs">XXXVIII</span></div>
+        <div class="flex justify-between border-b border-[var(--color-rule)] pb-2"><span>Idrees Ahmad</span><span class="text-[var(--color-ink-mute)] font-mono text-xs">XXXIX</span></div>
+        <div class="flex justify-between border-b border-[var(--color-rule)] pb-2"><span>Muhammad Waheed Khan</span><span class="text-[var(--color-ink-mute)] font-mono text-xs">XXXIX</span></div>
+        <div class="flex justify-between border-b border-[var(--color-rule)] pb-2"><span>Federico Martusciello</span><span class="text-[var(--color-ink-mute)] font-mono text-xs">XXXIX</span></div>
+        <div class="flex justify-between border-b border-[var(--color-rule)] pb-2"><span>Eoan O'Dea</span><span class="text-[var(--color-ink-mute)] font-mono text-xs">XL</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ LAB SPENCER ============ -->
+<main id="page-lab-spencer" class="page">
+  <section class="max-w-6xl mx-auto px-6 pt-16 pb-12">
+    <a href="#home" class="text-xs text-[var(--color-ink-mute)] hover:text-[var(--color-ink)]">← Back to home</a>
+    <p class="smallcaps mt-8 mb-4">SPENCER Lab · Research Lab at SWEN</p>
+    <h1 class="display text-5xl mb-8">Software Performance Engineering</h1>
+    <div class="grid md:grid-cols-3 gap-8 mb-12">
+      <div class="md:col-span-2">
+        <p class="text-lg text-[var(--color-ink-soft)] leading-relaxed">The SPENCER Lab investigates the performance and reliability of software systems, with a strong focus on search-based and automated techniques. Our work spans performance modeling, architectural optimization, microbenchmarking, and sustainability of cloud deployments.</p>
+        <p class="mt-4 text-[var(--color-ink-soft)] leading-relaxed">We collaborate with national and international partners on PNRR projects including RECHARGE and contribute to top venues such as ICSA, ICSE, and Empirical Software Engineering.</p>
+      </div>
+      <aside class="text-sm">
+        <div class="border-t border-[var(--color-rule)] pt-4">
+          <p class="smallcaps mb-2">Head</p>
+          <p class="font-serif text-base">Vittorio Cortellessa</p>
+        </div>
+        <div class="border-t border-[var(--color-rule)] pt-4 mt-6">
+          <p class="smallcaps mb-2">External site</p>
+          <a href="https://spencerlabaq.github.io" class="text-[var(--color-accent)] hover:underline underline-offset-4">spencerlabaq.github.io ↗</a>
+        </div>
+        <div class="border-t border-[var(--color-rule)] pt-4 mt-6">
+          <p class="smallcaps mb-2">Topics</p>
+          <p class="text-[var(--color-ink-soft)]">Performance · Search-based SE · Reliability · Sustainability</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="bg-[var(--color-cream)] border-y border-[var(--color-rule)]">
+    <div class="max-w-6xl mx-auto px-6 py-16">
+      <h2 class="display text-3xl mb-8">Team</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+        <div><div class="avatar aspect-square w-full mb-2 rounded-full text-sm">VC</div><p class="text-sm">Vittorio Cortellessa</p><p class="text-xs text-[var(--color-ink-mute)]">Head</p></div>
+        <div><div class="avatar aspect-square w-full mb-2 rounded-full text-sm">DP</div><p class="text-sm">Daniele Di Pompeo</p></div>
+        <div><div class="avatar aspect-square w-full mb-2 rounded-full text-sm">LT</div><p class="text-sm">Luca Traini</p></div>
+        <div><div class="avatar aspect-square w-full mb-2 rounded-full text-sm">MT</div><p class="text-sm">Michele Tucci</p></div>
+        <div><div class="avatar aspect-square w-full mb-2 rounded-full text-sm">MI</div><p class="text-sm">M. Imran (PhD)</p></div>
+        <div><div class="avatar aspect-square w-full mb-2 rounded-full text-sm">GD</div><p class="text-sm">G. D'Aloisio (PhD)</p></div>
+      </div>
+      <p class="mt-4 text-xs text-[var(--color-ink-mute)] italic">Team composition is illustrative — real mapping lives in Notion via People ↔ Lab relation.</p>
+    </div>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-16">
+    <div>
+      <h2 class="display text-3xl mb-6">Active projects</h2>
+      <ul class="border-t border-[var(--color-rule)]">
+        <li class="py-4 border-b border-[var(--color-rule)]">
+          <a href="#project-recharge" class="block">
+            <p class="smallcaps text-[var(--color-accent)]">PNRR · RECHARGE</p>
+            <p class="font-serif text-lg mt-1">Automated performance testing in CI/CD</p>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="display text-3xl mb-6">Selected publications</h2>
+      <ul class="border-t border-[var(--color-rule)]">
+        <li class="py-4 border-b border-[var(--color-rule)]">
+          <p class="text-sm">Cortellessa, Di Pompeo, Tucci · <em>Sustainable Alternatives for the Deployment of Microservices Architectures in the Cloud</em> · ICSA 2024</p>
+        </li>
+        <li class="py-4 border-b border-[var(--color-rule)]">
+          <p class="text-sm">Traini, Cortellessa, Di Pompeo, Tucci · <em>Towards effective assessment of steady state performance in Java software</em> · EMSE 2023</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<!-- ============ PROJECTS ============ -->
+<main id="page-projects" class="page">
+  <section class="max-w-6xl mx-auto px-6 pt-16 pb-12">
+    <p class="smallcaps mb-6">Projects</p>
+    <h1 class="display text-5xl mb-4">9 active research grants</h1>
+    <p class="text-[var(--color-ink-soft)] max-w-2xl">Horizon Europe projects, national PNRR and PRIN grants led or co-led by SWEN researchers. Industrial collaborations are listed separately.</p>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-6 pb-20 space-y-0 border-t border-[var(--color-rule)]">
+
+    <div class="py-8 border-b border-[var(--color-rule)] grid md:grid-cols-[160px_1fr_auto] gap-6">
+      <div>
+        <p class="smallcaps" style="color:var(--color-brand-magenta)">Horizon Europe</p>
+        <p class="font-mono text-xs text-[var(--color-ink-mute)] mt-1">MOSAICO</p>
+      </div>
+      <div>
+        <h3 class="font-serif text-xl mb-2">MOSAICO — Multi-agent Orchestration for Software AI Collaboration</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">Horizon Europe project advancing the use of AI multi-agent systems for software engineering tasks. MODES Lab involvement.</p>
+        <a href="https://mosaico-project.eu/" class="text-xs text-[var(--color-brand-magenta)] mt-2 inline-block hover:underline">mosaico-project.eu ↗</a>
+      </div>
+      <div class="text-xs text-[var(--color-ink-mute)] md:text-right md:self-center">since Jan 2025</div>
+    </div>
+
+    <div class="py-8 border-b border-[var(--color-rule)] grid md:grid-cols-[160px_1fr_auto] gap-6">
+      <div>
+        <p class="smallcaps" style="color:var(--color-brand-magenta)">EU Project</p>
+        <p class="font-mono text-xs text-[var(--color-ink-mute)] mt-1">AIM-PRO</p>
+      </div>
+      <div>
+        <h3 class="font-serif text-xl mb-2">AIM-PRO — AI Literacy for Multidisciplinary Professional Readiness & Outreach</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">EU project on AI literacy for multidisciplinary education and professional training. Juri Di Rocco is WP2 Leader.</p>
+        <a href="https://aim-pro.eu/" class="text-xs text-[var(--color-brand-magenta)] mt-2 inline-block hover:underline">aim-pro.eu ↗</a>
+      </div>
+      <div class="text-xs text-[var(--color-ink-mute)] md:text-right md:self-center">since Feb 2026</div>
+    </div>
+
+    <a href="#project-recharge" class="block py-8 border-b border-[var(--color-rule)] grid md:grid-cols-[160px_1fr_auto] gap-6 hover:bg-[var(--color-cream)] px-4 -mx-4">
+      <div>
+        <p class="smallcaps text-[var(--color-accent)]">PNRR</p>
+        <p class="font-mono text-xs text-[var(--color-ink-mute)] mt-1">P2022SELA7</p>
+      </div>
+      <div>
+        <h3 class="font-serif text-xl mb-2">RECHARGE — Automated performance testing in CI/CD</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">Static analysis and search-based algorithms to automate performance testing in continuous integration pipelines.</p>
+      </div>
+      <div class="text-xs text-[var(--color-ink-mute)] md:text-right md:self-center">Nov 2023 – Nov 2025</div>
+    </a>
+
+    <div class="py-8 border-b border-[var(--color-rule)] grid md:grid-cols-[160px_1fr_auto] gap-6">
+      <div>
+        <p class="smallcaps text-[var(--color-accent)]">PRIN</p>
+        <p class="font-mono text-xs text-[var(--color-ink-mute)] mt-1">2022LKJWHC</p>
+      </div>
+      <div>
+        <h3 class="font-serif text-xl mb-2">TRex-SE — Trustworthy recommenders for software engineers</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">Vulnerability-aware miners, a trustworthiness model, and recommenders that capture developers' feedback.</p>
+      </div>
+      <div class="text-xs text-[var(--color-ink-mute)] md:text-right md:self-center">Nov 2022 – Nov 2025</div>
+    </div>
+
+    <div class="py-8 border-b border-[var(--color-rule)] grid md:grid-cols-[160px_1fr_auto] gap-6">
+      <div>
+        <p class="smallcaps text-[var(--color-accent)]">PNRR</p>
+        <p class="font-mono text-xs text-[var(--color-ink-mute)] mt-1">P2022553SL</p>
+      </div>
+      <div>
+        <h3 class="font-serif text-xl mb-2">FRINGE — Fairness engineering for ML-intensive systems</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">Methodologies and SE solutions to improve development, monitoring, and design of fairness properties.</p>
+      </div>
+      <div class="text-xs text-[var(--color-ink-mute)] md:text-right md:self-center">Nov 2023 – Nov 2025</div>
+    </div>
+
+    <div class="py-8 border-b border-[var(--color-rule)] grid md:grid-cols-[160px_1fr_auto] gap-6">
+      <div>
+        <p class="smallcaps text-[var(--color-accent)]">PNRR</p>
+        <p class="font-mono text-xs text-[var(--color-ink-mute)] mt-1">2022JKA4SL</p>
+      </div>
+      <div>
+        <h3 class="font-serif text-xl mb-2">HALO — Human-aligned autonomy of AI systems</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">A dynamic software exoskeleton that lets users express moral preferences and control how autonomy is distributed across AI components.</p>
+      </div>
+      <div class="text-xs text-[var(--color-ink-mute)] md:text-right md:self-center">Sep 2023 – Sep 2025</div>
+    </div>
+
+    <div class="py-8 border-b border-[var(--color-rule)] grid md:grid-cols-[160px_1fr_auto] gap-6">
+      <div>
+        <p class="smallcaps text-[var(--color-accent)]">PRIN</p>
+        <p class="font-mono text-xs text-[var(--color-ink-mute)] mt-1">2022TEPX4R</p>
+      </div>
+      <div>
+        <h3 class="font-serif text-xl mb-2">BeT — Behavior-enabled IoT</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">Improving the design and implementation of Internet of Behaviors systems at the intersection of IoT, AI, and human-centered technologies.</p>
+      </div>
+      <div class="text-xs text-[var(--color-ink-mute)] md:text-right md:self-center">Sep 2023 – Sep 2025</div>
+    </div>
+
+    <div class="py-8 border-b border-[var(--color-rule)] grid md:grid-cols-[160px_1fr_auto] gap-6">
+      <div>
+        <p class="smallcaps text-[var(--color-accent)]">PRIN</p>
+        <p class="font-mono text-xs text-[var(--color-ink-mute)] mt-1">2020W3A5FY</p>
+      </div>
+      <div>
+        <h3 class="font-serif text-xl mb-2">EMELIOT — ML-intensive IoT systems</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">Engineering highly-dependable ML-intensive IoT systems, combining edge and cloud ML management.</p>
+      </div>
+      <div class="text-xs text-[var(--color-ink-mute)] md:text-right md:self-center">Jun 2022 – Jun 2025</div>
+    </div>
+
+    <div class="py-8 border-b border-[var(--color-rule)] grid md:grid-cols-[160px_1fr_auto] gap-6">
+      <div>
+        <p class="smallcaps text-[var(--color-accent)]">PNRR</p>
+        <p class="font-mono text-xs text-[var(--color-ink-mute)] mt-1">CN-HPC Spoke9</p>
+      </div>
+      <div>
+        <h3 class="font-serif text-xl mb-2">Digital Society, Smart Cities — CN-HPC Spoke 9</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">Digital twins of cities and communities: replicating behaviors, predicting evolutions, evaluating policies.</p>
+      </div>
+      <div class="text-xs text-[var(--color-ink-mute)] md:text-right md:self-center">Oct 2022 – Sep 2025</div>
+    </div>
+
+  </section>
+</main>
+
+<!-- ============ PROJECT DETAIL (RECHARGE) ============ -->
+<main id="page-project-recharge" class="page">
+  <section class="max-w-4xl mx-auto px-6 pt-16 pb-12">
+    <a href="#projects" class="text-xs text-[var(--color-ink-mute)] hover:text-[var(--color-ink)]">← All projects</a>
+    <div class="mt-8 flex items-baseline gap-4 flex-wrap">
+      <p class="smallcaps text-[var(--color-accent)]">PNRR Project</p>
+      <p class="font-mono text-xs text-[var(--color-ink-mute)]">P2022SELA7</p>
+    </div>
+    <h1 class="display text-5xl mt-4 mb-6">RECHARGE</h1>
+    <p class="text-xl font-serif text-[var(--color-ink-soft)] mb-10 leading-snug">Automated performance testing in CI/CD via static analysis and search-based algorithms.</p>
+
+    <div class="grid sm:grid-cols-3 gap-6 py-6 border-y border-[var(--color-rule)] mb-10">
+      <div>
+        <p class="smallcaps mb-2">Period</p>
+        <p>Nov 2023 – Nov 2025</p>
+      </div>
+      <div>
+        <p class="smallcaps mb-2">SWEN Lab</p>
+        <p>SPENCER Lab</p>
+      </div>
+      <div>
+        <p class="smallcaps mb-2">Project site</p>
+        <a href="https://recharge-project.github.io" class="text-[var(--color-accent)] hover:underline">recharge-project.github.io ↗</a>
+      </div>
+    </div>
+
+    <div class="prose prose-lg max-w-none">
+      <p class="text-[var(--color-ink-soft)] leading-relaxed">The RECHARGE project addresses the challenge of automating performance testing in Continuous Integration and Deployment pipelines by leveraging static analysis and search-based algorithms. The project proposes a novel framework to automate performance testing in CI/CD by introducing automated performance monitoring, which combines static analysis, regression testing optimization, and CI/CD processes to track software performance efficiently over time.</p>
+    </div>
+
+    <div class="mt-12 grid sm:grid-cols-2 gap-8">
+      <div>
+        <h2 class="display text-2xl mb-4">SWEN team</h2>
+        <ul class="text-sm space-y-2">
+          <li>Vittorio Cortellessa (PI)</li>
+          <li>Daniele Di Pompeo</li>
+          <li>Luca Traini</li>
+          <li>Michele Tucci</li>
+        </ul>
+        <p class="text-xs text-[var(--color-ink-mute)] italic mt-3">Illustrative — team to be verified.</p>
+      </div>
+      <div>
+        <h2 class="display text-2xl mb-4">Related publications</h2>
+        <ul class="text-sm space-y-3">
+          <li>Traini et al. · <em>Assessment of steady state performance in Java software</em> · EMSE 2023</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ NEWS ============ -->
+<main id="page-news" class="page">
+  <section class="max-w-5xl mx-auto px-6 pt-16 pb-12">
+    <p class="smallcaps mb-6">News</p>
+    <h1 class="display text-5xl mb-4">What's happening at SWEN</h1>
+    <p class="text-[var(--color-ink-soft)] max-w-2xl">Papers, events, awards, and PhD updates from the group.</p>
+  </section>
+  <section class="max-w-5xl mx-auto px-6 pb-20 border-t border-[var(--color-rule)]">
+    <article class="py-8 border-b border-[var(--color-rule)] grid md:grid-cols-[120px_1fr] gap-6">
+      <div class="smallcaps text-[var(--color-ink-mute)]">15 Apr 2026</div>
+      <div>
+        <p class="smallcaps text-[var(--color-accent)] mb-2">Paper</p>
+        <h2 class="font-serif text-2xl mb-2 leading-snug">Two SWEN papers accepted at ICSE 2026</h2>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">Work from SPENCER Lab and the MDE group will be presented at the main research track in Lisbon. Congratulations to the authors.</p>
+      </div>
+    </article>
+    <article class="py-8 border-b border-[var(--color-rule)] grid md:grid-cols-[120px_1fr] gap-6">
+      <div class="smallcaps text-[var(--color-ink-mute)]">20 Mar 2026</div>
+      <div>
+        <p class="smallcaps text-[var(--color-accent)] mb-2">Event</p>
+        <h2 class="font-serif text-2xl mb-2 leading-snug">SWEN Retreat 2026 in Roccaraso</h2>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">Three-day annual retreat: strategy sessions, cross-lab collaborations, new PhD project scoping.</p>
+      </div>
+    </article>
+    <article class="py-8 border-b border-[var(--color-rule)] grid md:grid-cols-[120px_1fr] gap-6">
+      <div class="smallcaps text-[var(--color-ink-mute)]">10 Feb 2026</div>
+      <div>
+        <p class="smallcaps text-[var(--color-accent)] mb-2">PhD</p>
+        <h2 class="font-serif text-2xl mb-2 leading-snug">XL Cycle PhD positions closed</h2>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed">One new PhD student (Eoan O'Dea) joining on model-driven engineering topics.</p>
+      </div>
+    </article>
+    <p class="mt-6 text-xs text-[var(--color-ink-mute)] italic">Placeholder — real content maintained via Notion News database.</p>
+  </section>
+</main>
+
+<!-- ============ PUBLICATIONS ============ -->
+<main id="page-publications" class="page">
+  <section class="max-w-5xl mx-auto px-6 pt-16 pb-12">
+    <p class="smallcaps mb-6">Publications</p>
+    <h1 class="display text-5xl mb-4">Peer-reviewed output</h1>
+    <p class="text-[var(--color-ink-soft)] max-w-2xl">Journal articles and conference papers from SWEN members, auto-fetched from DBLP and filtered to top SE venues. Preprints, workshops, and editorials are excluded.</p>
+  </section>
+  <section class="max-w-5xl mx-auto px-6 pb-10">
+    <div class="flex items-center gap-3 text-sm mb-8">
+      <span class="smallcaps">Filter:</span>
+      <button class="px-3 py-1 border border-[var(--color-ink)] rounded-full text-xs">All years</button>
+      <button class="px-3 py-1 border border-[var(--color-rule)] rounded-full text-xs hover:border-[var(--color-ink)]">2024</button>
+      <button class="px-3 py-1 border border-[var(--color-rule)] rounded-full text-xs hover:border-[var(--color-ink)]">2023</button>
+      <button class="px-3 py-1 border border-[var(--color-rule)] rounded-full text-xs hover:border-[var(--color-ink)]">2022</button>
+      <span class="ml-4 smallcaps">Venue:</span>
+      <button class="px-3 py-1 border border-[var(--color-rule)] rounded-full text-xs hover:border-[var(--color-ink)]">ICSE</button>
+      <button class="px-3 py-1 border border-[var(--color-rule)] rounded-full text-xs hover:border-[var(--color-ink)]">MODELS</button>
+      <button class="px-3 py-1 border border-[var(--color-rule)] rounded-full text-xs hover:border-[var(--color-ink)]">ASE</button>
+      <button class="px-3 py-1 border border-[var(--color-rule)] rounded-full text-xs hover:border-[var(--color-ink)]">TSE</button>
+    </div>
+  </section>
+  <section class="max-w-5xl mx-auto px-6 pb-20 border-t border-[var(--color-rule)]">
+    <div class="py-6 border-b border-[var(--color-rule)] grid md:grid-cols-[80px_1fr_auto] gap-6">
+      <div class="smallcaps text-[var(--color-ink-mute)]">2024</div>
+      <div>
+        <p class="font-serif text-lg font-medium leading-snug">Towards Synthetic Trace Generation of Modeling Operations using In-Context Learning Approach</p>
+        <p class="text-sm text-[var(--color-ink-mute)] mt-2">V. Muttillo, C. Di Sipio, R. Rubei, L. Berardinelli, M. Dehghani · ASE 2024</p>
+      </div>
+      <div class="flex md:flex-col gap-3 text-xs items-start">
+        <a href="https://doi.org/10.1145/3691620.3695058" class="text-[var(--color-accent)] hover:underline">DOI ↗</a>
+        <span class="text-[var(--color-ink-mute)]">BibTeX</span>
+      </div>
+    </div>
+    <div class="py-6 border-b border-[var(--color-rule)] grid md:grid-cols-[80px_1fr_auto] gap-6">
+      <div class="smallcaps text-[var(--color-ink-mute)]">2024</div>
+      <div>
+        <p class="font-serif text-lg font-medium leading-snug">Exploring Sustainable Alternatives for the Deployment of Microservices Architectures in the Cloud</p>
+        <p class="text-sm text-[var(--color-ink-mute)] mt-2">V. Cortellessa, D. Di Pompeo, M. Tucci · ICSA 2024</p>
+      </div>
+      <div class="flex md:flex-col gap-3 text-xs items-start">
+        <a href="https://doi.org/10.1109/ICSA59870.2024.00012" class="text-[var(--color-accent)] hover:underline">DOI ↗</a>
+        <span class="text-[var(--color-ink-mute)]">BibTeX</span>
+      </div>
+    </div>
+    <div class="py-6 border-b border-[var(--color-rule)] grid md:grid-cols-[80px_1fr_auto] gap-6">
+      <div class="smallcaps text-[var(--color-ink-mute)]">2023</div>
+      <div>
+        <p class="font-serif text-lg font-medium leading-snug">Towards effective assessment of steady state performance in Java software: are we there yet?</p>
+        <p class="text-sm text-[var(--color-ink-mute)] mt-2">L. Traini, V. Cortellessa, D. Di Pompeo, M. Tucci · Empirical Software Engineering</p>
+      </div>
+      <div class="flex md:flex-col gap-3 text-xs items-start">
+        <a href="https://doi.org/10.1007/s10664-022-10247-x" class="text-[var(--color-accent)] hover:underline">DOI ↗</a>
+        <span class="text-[var(--color-ink-mute)]">BibTeX</span>
+      </div>
+    </div>
+    <p class="mt-6 text-xs text-[var(--color-ink-mute)] italic">Only 3 entries shown because the current SWEN site lists only these. After DBLP auto-fetch is wired up, this list will populate from ~all SWEN members' publication records.</p>
+  </section>
+</main>
+
+<!-- ============ SOFTWARE ============ -->
+<main id="page-software" class="page">
+  <section class="max-w-6xl mx-auto px-6 pt-16 pb-12">
+    <p class="smallcaps mb-6">Software & Tools</p>
+    <h1 class="display text-5xl mb-4 max-w-3xl">Research we ship</h1>
+    <p class="text-lg text-[var(--color-ink-soft)] max-w-3xl leading-relaxed">SWEN actively develops and maintains academic software used in research and education worldwide. Our tools span model-driven engineering, software performance analysis, software architecture, and recommender systems for developers. Contributions are welcome.</p>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-6 pb-8">
+    <div class="flex items-center gap-3 text-sm flex-wrap">
+      <span class="smallcaps">Category:</span>
+      <button class="px-3 py-1 border border-[var(--color-ink)] rounded-full text-xs">All</button>
+      <button class="px-3 py-1 border border-[var(--color-rule)] rounded-full text-xs hover:border-[var(--color-ink)]">MDE Framework</button>
+      <button class="px-3 py-1 border border-[var(--color-rule)] rounded-full text-xs hover:border-[var(--color-ink)]">Library</button>
+      <button class="px-3 py-1 border border-[var(--color-rule)] rounded-full text-xs hover:border-[var(--color-ink)]">CLI Tool</button>
+      <button class="px-3 py-1 border border-[var(--color-rule)] rounded-full text-xs hover:border-[var(--color-ink)]">Web App</button>
+      <button class="px-3 py-1 border border-[var(--color-rule)] rounded-full text-xs hover:border-[var(--color-ink)]">Dataset</button>
+      <span class="ml-4 smallcaps">Language:</span>
+      <button class="px-3 py-1 border border-[var(--color-rule)] rounded-full text-xs hover:border-[var(--color-ink)]">TypeScript</button>
+      <button class="px-3 py-1 border border-[var(--color-rule)] rounded-full text-xs hover:border-[var(--color-ink)]">Java</button>
+      <button class="px-3 py-1 border border-[var(--color-rule)] rounded-full text-xs hover:border-[var(--color-ink)]">Python</button>
+    </div>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-6 pb-20">
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-l border-[var(--color-rule)]">
+
+      <!-- Placeholder 1 -->
+      <article class="p-6 border-r border-b border-[var(--color-rule)] flex flex-col min-h-[280px]">
+        <div class="flex items-center justify-between mb-4">
+          <span class="smallcaps text-xs">MDE Framework</span>
+          <span class="text-xs text-[var(--color-ink-mute)]">Active</span>
+        </div>
+        <h3 class="font-serif text-2xl mb-2">[Software Name 1]</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Two-sentence description. What the tool does, who uses it, main selling point compared to alternatives.</p>
+        <div class="mt-6 pt-4 border-t border-[var(--color-rule)]">
+          <div class="flex items-center justify-between text-xs text-[var(--color-ink-mute)] mb-3">
+            <span class="font-mono">TypeScript</span>
+            <span>★ 000 · 00 contributors</span>
+          </div>
+          <div class="flex items-center gap-4 text-xs">
+            <a href="#" class="text-[var(--color-accent)] hover:underline">GitHub ↗</a>
+            <a href="#" class="text-[var(--color-accent)] hover:underline">Docs ↗</a>
+            <a href="#" class="text-[var(--color-accent)] hover:underline">Paper ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Placeholder 2 -->
+      <article class="p-6 border-r border-b border-[var(--color-rule)] flex flex-col min-h-[280px]">
+        <div class="flex items-center justify-between mb-4">
+          <span class="smallcaps text-xs">Library</span>
+          <span class="text-xs text-[var(--color-ink-mute)]">Active</span>
+        </div>
+        <h3 class="font-serif text-2xl mb-2">[Software Name 2]</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Two-sentence description.</p>
+        <div class="mt-6 pt-4 border-t border-[var(--color-rule)]">
+          <div class="flex items-center justify-between text-xs text-[var(--color-ink-mute)] mb-3">
+            <span class="font-mono">Java</span>
+            <span>★ 000 · 00 contributors</span>
+          </div>
+          <div class="flex items-center gap-4 text-xs">
+            <a href="#" class="text-[var(--color-accent)] hover:underline">GitHub ↗</a>
+            <a href="#" class="text-[var(--color-accent)] hover:underline">Maven ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Placeholder 3 -->
+      <article class="p-6 border-r border-b border-[var(--color-rule)] flex flex-col min-h-[280px]">
+        <div class="flex items-center justify-between mb-4">
+          <span class="smallcaps text-xs">CLI Tool</span>
+          <span class="text-xs text-[var(--color-ink-mute)]">Active</span>
+        </div>
+        <h3 class="font-serif text-2xl mb-2">[Software Name 3]</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Two-sentence description.</p>
+        <div class="mt-6 pt-4 border-t border-[var(--color-rule)]">
+          <div class="flex items-center justify-between text-xs text-[var(--color-ink-mute)] mb-3">
+            <span class="font-mono">Python</span>
+            <span>★ 000 · 00 contributors</span>
+          </div>
+          <div class="flex items-center gap-4 text-xs">
+            <a href="#" class="text-[var(--color-accent)] hover:underline">GitHub ↗</a>
+            <a href="#" class="text-[var(--color-accent)] hover:underline">PyPI ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Placeholder 4 -->
+      <article class="p-6 border-r border-b border-[var(--color-rule)] flex flex-col min-h-[280px]">
+        <div class="flex items-center justify-between mb-4">
+          <span class="smallcaps text-xs">Web App</span>
+          <span class="text-xs text-[var(--color-ink-mute)]">Active</span>
+        </div>
+        <h3 class="font-serif text-2xl mb-2">[Software Name 4]</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Two-sentence description.</p>
+        <div class="mt-6 pt-4 border-t border-[var(--color-rule)]">
+          <div class="flex items-center justify-between text-xs text-[var(--color-ink-mute)] mb-3">
+            <span class="font-mono">TypeScript</span>
+            <span>★ 000 · 00 contributors</span>
+          </div>
+          <div class="flex items-center gap-4 text-xs">
+            <a href="#" class="text-[var(--color-accent)] hover:underline">Live ↗</a>
+            <a href="#" class="text-[var(--color-accent)] hover:underline">GitHub ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Placeholder 5 -->
+      <article class="p-6 border-r border-b border-[var(--color-rule)] flex flex-col min-h-[280px]">
+        <div class="flex items-center justify-between mb-4">
+          <span class="smallcaps text-xs">Dataset</span>
+          <span class="text-xs text-[var(--color-ink-mute)]">Active</span>
+        </div>
+        <h3 class="font-serif text-2xl mb-2">[Software Name 5]</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Two-sentence description.</p>
+        <div class="mt-6 pt-4 border-t border-[var(--color-rule)]">
+          <div class="flex items-center justify-between text-xs text-[var(--color-ink-mute)] mb-3">
+            <span class="font-mono">JSONL / CSV</span>
+            <span>Zenodo DOI</span>
+          </div>
+          <div class="flex items-center gap-4 text-xs">
+            <a href="#" class="text-[var(--color-accent)] hover:underline">Zenodo ↗</a>
+            <a href="#" class="text-[var(--color-accent)] hover:underline">Paper ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Placeholder 6 -->
+      <article class="p-6 border-r border-b border-[var(--color-rule)] flex flex-col min-h-[280px] bg-[var(--color-cream)]">
+        <div class="flex items-center justify-between mb-4">
+          <span class="smallcaps text-xs text-[var(--color-ink-mute)]">Add your tool</span>
+        </div>
+        <h3 class="font-serif text-2xl mb-2 text-[var(--color-ink-mute)]">Maintain a tool?</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">If you're a SWEN member and maintain academic software, add it via the Notion database.</p>
+        <div class="mt-6 pt-4 border-t border-[var(--color-rule)] text-xs">
+          <a href="#" class="text-[var(--color-accent)] hover:underline">Submit tool →</a>
+        </div>
+      </article>
+
+    </div>
+    <p class="mt-8 text-xs text-[var(--color-ink-mute)] italic">Content to be populated from the SWEN team. GitHub stars and last-updated can be fetched live via the GitHub API at build time.</p>
+  </section>
+
+  <!-- Why software matters -->
+  <section class="bg-[var(--color-cream)] border-y border-[var(--color-rule)]">
+    <div class="max-w-4xl mx-auto px-6 py-16 prose-lg">
+      <p class="smallcaps mb-4">Our commitment</p>
+      <h2 class="display text-3xl mb-6">Research software is a first-class output</h2>
+      <p class="text-[var(--color-ink-soft)] leading-relaxed">We believe tools and datasets are as important as papers. All our software is open-source (most under permissive licenses), actively maintained, and documented. Contributions, bug reports, and academic collaborations are welcome — see each tool's repository for contribution guidelines.</p>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-[var(--color-cream)] border-t border-[var(--color-rule)] mt-8">
+  <div class="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-4 gap-8 text-sm">
+    <div class="md:col-span-2">
+      <img src="website-logo.png" alt="SWEN" class="h-10 w-auto mb-5" />
+      <p class="text-[var(--color-ink-soft)] leading-relaxed max-w-md">Software Engineering Research Group · DISIM · Università degli Studi dell'Aquila · Via Vetoio, 67100 L'Aquila, Italy</p>
+    </div>
+    <div>
+      <p class="smallcaps mb-3">Research</p>
+      <ul class="space-y-2 text-[var(--color-ink-soft)]">
+        <li><a href="#lab-spencer" class="hover:text-[var(--color-accent)]">SPENCER Lab ↗</a></li>
+        <li><a href="#home" class="hover:text-[var(--color-accent)]">SoSy Group ↗</a></li>
+        <li><a href="#home" class="hover:text-[var(--color-accent)]">FrAmeLab ↗</a></li>
+        <li><a href="#software" class="hover:text-[var(--color-accent)]">Software & Tools</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="smallcaps mb-3">Contact</p>
+      <ul class="space-y-2 text-[var(--color-ink-soft)]">
+        <li>LinkedIn</li>
+        <li>RSS feed</li>
+        <li>alfonso.pierantonio@univaq.it</li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-[var(--color-rule)]">
+    <div class="max-w-6xl mx-auto px-6 py-6 flex flex-wrap justify-between items-center text-xs text-[var(--color-ink-mute)]">
+      <p>© 2026 SWEN Group · Università degli Studi dell'Aquila</p>
+      <p>Mockup v1 · built with Astro + Notion + GitHub Pages (planned)</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Simple hash router
+  const pages = ['home','research','people','software','lab-spencer','projects','project-recharge','news','publications'];
+  function route() {
+    const hash = (location.hash || '#home').replace('#','');
+    let target = 'home';
+    if (pages.includes(hash)) target = hash;
+    pages.forEach(p => {
+      const el = document.getElementById('page-' + p);
+      if (el) el.classList.toggle('active', p === target);
+    });
+    // highlight topbar link
+    document.querySelectorAll('.nav-link').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + target || (target === 'home' && a.getAttribute('href') === '#home'));
+    });
+    window.scrollTo({top:0, behavior:'instant'});
+  }
+  window.addEventListener('hashchange', route);
+  route();
+</script>
+</body>
+</html>
