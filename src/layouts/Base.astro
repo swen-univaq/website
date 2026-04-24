@@ -17,6 +17,7 @@ const {
 
 const siteUrl = Astro.site?.toString() ?? '';
 const fullTitle = title.includes('SWEN') ? title : `${title} · SWEN`;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <!doctype html>
 <html lang="en">
@@ -25,15 +26,15 @@ const fullTitle = title.includes('SWEN') ? title : `${title} · SWEN`;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <link rel="icon" type="image/png" href={`${import.meta.env.BASE_URL}website-logo.png`} />
+    <link rel="icon" type="image/png" href={`${base}/website-logo.png`} />
 
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={`${siteUrl}${import.meta.env.BASE_URL}${ogImage}`} />
+    <meta property="og:image" content={`${siteUrl}${base}/${ogImage}`} />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="sitemap" href={`${import.meta.env.BASE_URL}sitemap-index.xml`} />
+    <link rel="sitemap" href={`${base}/sitemap-index.xml`} />
   </head>
   <body class="antialiased">
     <Topbar />
