@@ -27,8 +27,3 @@ yarn-error.log*
 
 # OS
 Thumbs.db
-
-# Safety net - secret files
-.end
-.env*
-!.env.example

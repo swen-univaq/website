@@ -2,19 +2,17 @@
 import Base from '../../layouts/Base.astro';
 import {
   people, projects, talks, labs, software,
-  labAccent, initials, BASE, fmtMonth,
+  labAccent, initials, BASE, fmtMonth, personPhotoUrl,
 } from '../../lib/resolve';
 
 export async function getStaticPaths() {
   // @ts-ignore — dynamic import of generated data
   const { people: p } = await import('../../lib/resolve');
-  // Only generate pages for people with a long bio (template decision).
-  return p
-    .filter((person: any) => (person.longBio ?? '').trim().length > 0)
-    .map((person: any) => ({
-      params: { slug: person.slug },
-      props: { person },
-    }));
+  // Generate a page for every person — empty fields render with graceful fallbacks.
+  return p.map((person: any) => ({
+    params: { slug: person.slug },
+    props: { person },
+  }));
 }
 
 const { person } = Astro.props as { person: typeof people[number] };
@@ -53,9 +51,9 @@ const personSoftware = software.filter((s) => s.maintainerIds.includes(person.id
     <a href={`${BASE}/people`} class="text-xs text-ink-mute hover:text-ink">← All people</a>
     <div class="grid md:grid-cols-[180px_1fr] gap-10 mt-10 items-start">
       <div class="avatar aspect-[4/5] w-full rounded-2xl text-3xl">
-        {person.photo
-          ? <img src={person.photo} alt={person.name} class="w-full h-full object-cover rounded-2xl" />
-          : <span>{initials(person.name)}</span>}
+        {(() => { const url = personPhotoUrl(person); return url
+          ? <img src={url} alt={person.name} class="w-full h-full object-cover rounded-2xl" />
+          : <span>{initials(person.name)}</span>; })()}
       </div>
       <div>
         <div class="flex items-center gap-3 mb-3 flex-wrap">
@@ -87,7 +85,12 @@ const personSoftware = software.filter((s) => s.maintainerIds.includes(person.id
   <section class="max-w-5xl mx-auto px-6 py-10 grid md:grid-cols-[1fr_260px] gap-12 border-t border-rule">
     <div>
       <h2 class="smallcaps mb-5">Bio</h2>
-      {person.longBio.split('\n\n').map((para) => <p class="text-ink-soft leading-relaxed mb-4">{para}</p>)}
+      {person.longBio.trim().length > 0
+        ? person.longBio.split('\n\n').map((para) => <p class="text-ink-soft leading-relaxed mb-4">{para}</p>)
+        : person.shortBio.trim().length > 0
+          ? <p class="text-ink-soft leading-relaxed mb-4">{person.shortBio}</p>
+          : <p class="text-ink-mute italic leading-relaxed">Full bio coming soon. In the meantime, see {person.website ? <a href={person.website} target="_blank" rel="noopener" class="hover:text-brand-magenta">the institutional page</a> : 'the institutional directory'}.</p>
+      }
     </div>
     <aside class="text-sm space-y-8">
       {person.interests.length > 0 && (

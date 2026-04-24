@@ -1,30 +1,83 @@
 ---
 import Base from '../../layouts/Base.astro';
+
+// @ts-expect-error — generated at build time
+import pubsData from '../../data/generated/publications.json';
+
+type Publication = {
+  key: string;
+  type: 'article' | 'inproceedings';
+  title: string;
+  authors: string[];
+  venue: string;
+  year: number;
+  doi?: string;
+  ee?: string;
+  authorsSwen: string[];
+};
+
+const pubs = pubsData as Publication[];
+const byYear = pubs.reduce<Record<number, Publication[]>>((acc, p) => {
+  (acc[p.year] ??= []).push(p);
+  return acc;
+}, {});
+const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
+
+function emphasizeSwen(authors: string[], swen: string[]): string {
+  return authors.map((a) => (swen.includes(a) ? `<strong>${a}</strong>` : a)).join(', ');
+}
 ---
-<Base title="Publications — SWEN" description="Peer-reviewed publications by SWEN members, auto-fetched from DBLP.">
-  <section class="max-w-5xl mx-auto px-6 pt-16 pb-12">
+<Base title="Publications — SWEN" description={`${pubs.length} peer-reviewed publications by SWEN members, auto-fetched from DBLP.`}>
+  <section class="max-w-5xl mx-auto px-6 pt-16 pb-10">
     <p class="smallcaps mb-6">Publications</p>
-    <h1 class="display text-5xl mb-4">Peer-reviewed output</h1>
-    <p class="text-ink-soft max-w-2xl">
-      Journal articles and conference papers from SWEN members,
-      auto-fetched from DBLP and filtered to top SE venues.
-      Preprints, workshops, and editorials are excluded.
+    <h1 class="display text-5xl mb-4">{pubs.length} peer-reviewed publications</h1>
+    <p class="text-ink-soft max-w-2xl leading-relaxed">
+      Journal articles and conference papers from SWEN members, auto-fetched from DBLP and
+      filtered to top SE venues. Preprints, workshops, and editorials are excluded.
+      SWEN authors are in <strong>bold</strong>.
     </p>
   </section>
 
-  <section class="max-w-5xl mx-auto px-6 pb-20">
-    <div class="p-10 rounded-2xl bg-cream border border-rule">
-      <p class="smallcaps mb-3">Coming in batch 3</p>
-      <h2 class="display text-2xl mb-4">DBLP auto-fetch in progress</h2>
-      <p class="text-ink-soft leading-relaxed">
-        For each SWEN member with a <code class="font-mono text-sm">DBLP PID</code> in Notion,
-        the build script will fetch their publications, dedupe by DOI, filter to peer-reviewed venues
-        (journals + top SE conferences), and render them here with year/venue filters.
-      </p>
-      <p class="text-ink-soft leading-relaxed mt-4">
-        Meanwhile, see individual member pages for selected publications, or visit DBLP directly:
-        <a href="https://dblp.org/search?q=L%27Aquila+SWEN" target="_blank" rel="noopener" class="text-brand-magenta hover:underline">dblp.org ↗</a>
-      </p>
-    </div>
-  </section>
+  {pubs.length === 0 ? (
+    <section class="max-w-5xl mx-auto px-6 pb-20">
+      <div class="p-10 rounded-2xl bg-cream border border-rule">
+        <p class="smallcaps mb-3">No publications yet</p>
+        <h2 class="display text-2xl mb-4">Add DBLP PIDs in Notion to populate</h2>
+        <p class="text-ink-soft leading-relaxed">
+          For each SWEN member, open their People page in Notion and fill the <code class="font-mono text-sm">DBLP PID</code>
+          field (e.g. <code class="font-mono">p/AlfonsoPierantonio</code>). At the next build,
+          DBLP is queried per author and peer-reviewed papers appear here.
+        </p>
+      </div>
+    </section>
+  ) : (
+    <section class="max-w-5xl mx-auto px-6 pb-20">
+      <div class="flex items-center gap-2 mb-8 flex-wrap text-xs">
+        <span class="smallcaps mr-2">Years:</span>
+        {years.slice(0, 10).map((y) => (
+          <a href={`#y${y}`} class="px-3 py-1 border border-rule rounded-full hover:border-ink">{y}</a>
+        ))}
+      </div>
+      {years.map((year) => (
+        <section id={`y${year}`} class="mb-12">
+          <h2 class="display text-3xl mb-6 sticky top-[72px] bg-paper py-2 -my-2">{year}</h2>
+          <ul class="border-t border-rule">
+            {byYear[year].map((p) => (
+              <li class="py-5 border-b border-rule grid md:grid-cols-[80px_1fr_auto] gap-4">
+                <div class="smallcaps text-ink-mute">{p.type === 'article' ? 'Journal' : 'Conf.'}</div>
+                <div>
+                  <p class="font-serif text-lg leading-snug mb-1">{p.title}</p>
+                  <p class="text-sm text-ink-mute" set:html={emphasizeSwen(p.authors, p.authorsSwen) + ' · <em>' + p.venue + '</em>'} />
+                </div>
+                <div class="flex md:flex-col gap-3 text-xs items-start md:text-right">
+                  {p.doi && <a href={`https://doi.org/${p.doi}`} target="_blank" rel="noopener" class="text-brand-magenta hover:underline">DOI ↗</a>}
+                  {!p.doi && p.ee && <a href={p.ee} target="_blank" rel="noopener" class="text-brand-magenta hover:underline">Link ↗</a>}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </section>
+  )}
 </Base>

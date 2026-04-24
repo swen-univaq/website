@@ -11,7 +11,9 @@
     "astro": "astro",
     "check": "astro check",
     "fetch:notion": "tsx scripts/fetch-notion.ts",
-    "fetch:content": "pnpm fetch:notion"
+    "fetch:dblp": "tsx scripts/fetch-dblp.ts",
+    "fetch:github": "tsx scripts/fetch-github.ts",
+    "fetch:content": "pnpm fetch:notion && pnpm fetch:dblp && pnpm fetch:github"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

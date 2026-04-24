@@ -38,10 +38,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Fetch Notion content
+      - name: Fetch all content (Notion + DBLP + GitHub)
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-        run: pnpm fetch:notion
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm fetch:content
 
       - name: Build Astro site
         env:

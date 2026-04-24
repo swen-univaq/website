@@ -138,3 +138,34 @@ export function fmtDate(isoDate: string | null): string {
 
 /** Base URL helper (handles /website/ subpath on GitHub Pages). */
 export const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/* ------------------------------------------------------------------ */
+/* Photo resolver — prefers Notion URL, falls back to public/people/  */
+/* ------------------------------------------------------------------ */
+
+// Build-time discovery of locally-hosted portraits. Works both in `astro dev`
+// and `astro build` because import.meta.glob runs at module load on Node.
+const localPhotoGlob = import.meta.glob('/public/people/*.{jpg,jpeg,png,webp}', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+}) as Record<string, string>;
+
+const slugsWithLocalPhoto = new Set(
+  Object.keys(localPhotoGlob).map((path) => {
+    const file = path.split('/').pop() ?? '';
+    return file.replace(/\.(jpg|jpeg|png|webp)$/i, '');
+  }),
+);
+
+/**
+ * Returns the URL to use for a person's portrait, in priority order:
+ *   1. Notion "Photo" field if populated
+ *   2. public/people/{slug}.{jpg,jpeg,png,webp} if the file exists
+ *   3. null  → caller should render initials
+ */
+export function personPhotoUrl(p: Person): string | null {
+  if (p.photo && p.photo.trim().length > 0) return p.photo;
+  if (slugsWithLocalPhoto.has(p.slug)) return `${BASE}/people/${p.slug}.jpg`;
+  return null;
+}
