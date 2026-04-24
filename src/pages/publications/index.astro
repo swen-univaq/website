@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="Publications — SWEN" description="Peer-reviewed publications by SWEN members, auto-fetched from DBLP.">
+  <section class="max-w-5xl mx-auto px-6 pt-16 pb-12">
+    <p class="smallcaps mb-6">Publications</p>
+    <h1 class="display text-5xl mb-4">Peer-reviewed output</h1>
+    <p class="text-ink-soft max-w-2xl">
+      Journal articles and conference papers from SWEN members,
+      auto-fetched from DBLP and filtered to top SE venues.
+      Preprints, workshops, and editorials are excluded.
+    </p>
+  </section>
+
+  <section class="max-w-5xl mx-auto px-6 pb-20">
+    <div class="p-10 rounded-2xl bg-cream border border-rule">
+      <p class="smallcaps mb-3">Coming in batch 3</p>
+      <h2 class="display text-2xl mb-4">DBLP auto-fetch in progress</h2>
+      <p class="text-ink-soft leading-relaxed">
+        For each SWEN member with a <code class="font-mono text-sm">DBLP PID</code> in Notion,
+        the build script will fetch their publications, dedupe by DOI, filter to peer-reviewed venues
+        (journals + top SE conferences), and render them here with year/venue filters.
+      </p>
+      <p class="text-ink-soft leading-relaxed mt-4">
+        Meanwhile, see individual member pages for selected publications, or visit DBLP directly:
+        <a href="https://dblp.org/search?q=L%27Aquila+SWEN" target="_blank" rel="noopener" class="text-brand-magenta hover:underline">dblp.org ↗</a>
+      </p>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,90 @@
+---
+import Base from '../../layouts/Base.astro';
+import { people, ROLE_ORDER, ROLE_LABEL, initials, BASE } from '../../lib/resolve';
+
+/* group people by role, preserving the canonical order */
+const grouped: Record<string, typeof people> = {};
+for (const role of ROLE_ORDER) grouped[role] = [];
+for (const p of people) {
+  if (p.role && grouped[p.role]) grouped[p.role].push(p);
+}
+for (const role of ROLE_ORDER) {
+  grouped[role].sort((a, b) => a.order - b.order);
+}
+
+const hasPersonalPage = (p: typeof people[number]) => p.longBio.trim().length > 0;
+---
+<Base title="People — SWEN" description={`The ${people.length} researchers of the SWEN group at DISIM, Università degli Studi dell'Aquila.`}>
+  <section class="max-w-6xl mx-auto px-6 pt-16 pb-12">
+    <p class="smallcaps mb-6">People</p>
+    <h1 class="display text-5xl mb-4">{people.length} researchers</h1>
+    <p class="text-ink-soft max-w-2xl">
+      Full professors, associate professors, assistant professors, postdocs, and doctoral students.
+      Click any name for the individual page with bio and publications auto-fetched from DBLP.
+    </p>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-6 pb-20">
+    {ROLE_ORDER.map((role) => {
+      const group = grouped[role];
+      if (group.length === 0) return null;
+      const isFaculty = ['PO', 'PA', 'RTD-B', 'RTD-A'].includes(role);
+      const isPhD = role === 'PhD';
+
+      return (
+        <div class="border-t border-rule py-10">
+          <h2 class="smallcaps mb-6">{ROLE_LABEL[role]}</h2>
+          {isFaculty ? (
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+              {group.map((p) => {
+                const inner = (
+                  <>
+                    <div class="avatar aspect-[4/5] w-full mb-3 rounded-sm">
+                      {p.photo
+                        ? <img src={p.photo} alt={p.name} class="w-full h-full object-cover rounded-sm" />
+                        : <span>{initials(p.name)}</span>}
+                    </div>
+                    <p class="font-serif text-base leading-tight">{p.name}</p>
+                  </>
+                );
+                return hasPersonalPage(p)
+                  ? <a href={`${BASE}/people/${p.slug}`} class="group">{inner}</a>
+                  : <div>{inner}</div>;
+              })}
+            </div>
+          ) : isPhD ? (
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3 text-sm">
+              {group.map((p) => {
+                const cycle = (p.notes.match(/Cycle\s+([IVX]+)/i)?.[1] ?? '').toUpperCase();
+                return (
+                  <div class="flex justify-between border-b border-rule pb-2">
+                    <span>{p.name}</span>
+                    <span class="text-ink-mute font-mono text-xs">{cycle}</span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
+              {group.map((p) => {
+                const inner = (
+                  <>
+                    <div class="avatar aspect-square w-full mb-2 rounded-full text-sm">
+                      {p.photo
+                        ? <img src={p.photo} alt={p.name} class="w-full h-full object-cover rounded-full" />
+                        : <span>{initials(p.name)}</span>}
+                    </div>
+                    <p class="text-sm leading-tight">{p.name}</p>
+                  </>
+                );
+                return hasPersonalPage(p)
+                  ? <a href={`${BASE}/people/${p.slug}`} class="group">{inner}</a>
+                  : <div>{inner}</div>;
+              })}
+            </div>
+          )}
+        </div>
+      );
+    })}
+  </section>
+</Base>

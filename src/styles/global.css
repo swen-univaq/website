@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply font-sans text-ink bg-paper;
+  }
+  h1, h2, h3, h4 {
+    @apply font-serif tracking-tight;
+    font-variation-settings: 'opsz' 72;
+  }
+}
+
+@layer components {
+  .display {
+    @apply font-serif tracking-tighter font-medium;
+    font-variation-settings: 'opsz' 144;
+  }
+  .display-tight {
+    @apply font-serif tracking-tightest font-semibold;
+    font-variation-settings: 'opsz' 144;
+  }
+  .smallcaps {
+    @apply uppercase tracking-widest text-xs font-semibold text-ink-mute;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider;
+  }
+  .gradient-text {
+    background: linear-gradient(95deg, #9A1A5A 0%, #E91E5A 32%, #F26A1F 66%, #FCB51A 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .gradient-bar {
+    background: linear-gradient(95deg, #9A1A5A 0%, #E91E5A 32%, #F26A1F 66%, #FCB51A 100%);
+  }
+  .avatar {
+    @apply flex items-center justify-center font-serif font-medium border border-rule;
+    background: linear-gradient(135deg, #f5f3ef, #ebe6db);
+    color: #44546b;
+  }
+}

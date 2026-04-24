@@ -1,0 +1,27 @@
+---
+import Base from '../../layouts/Base.astro';
+import { news, fmtDate, BASE } from '../../lib/resolve';
+
+export async function getStaticPaths() {
+  const { news: ns } = await import('../../lib/resolve');
+  return ns
+    .filter((n: any) => n.status === 'Published')
+    .map((n: any) => ({ params: { slug: n.slug }, props: { item: n } }));
+}
+
+const { item } = Astro.props as { item: typeof news[number] };
+---
+<Base title={`${item.title} — SWEN`} description={item.excerpt}>
+  <article class="max-w-3xl mx-auto px-6 pt-16 pb-20">
+    <a href={`${BASE}/news`} class="text-xs text-ink-mute hover:text-ink">← All news</a>
+    <div class="mt-8 mb-6 flex items-center gap-4 flex-wrap">
+      {item.category && <span class="chip bg-cream text-ink-soft">{item.category}</span>}
+      <span class="text-sm text-ink-mute">{fmtDate(item.date)}</span>
+    </div>
+    <h1 class="display text-5xl mb-6">{item.title}</h1>
+    {item.excerpt && <p class="text-xl font-serif text-ink-soft mb-10 leading-snug">{item.excerpt}</p>}
+    <p class="text-xs text-ink-mute italic mt-10">
+      Body content from Notion rich-text is not rendered yet — planned for batch 3 (MDX-ification of Notion blocks).
+    </p>
+  </article>
+</Base>

@@ -1,0 +1,40 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const year = new Date().getFullYear();
+---
+<footer class="bg-cream border-t border-rule mt-8">
+  <div class="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-4 gap-8 text-sm">
+    <div class="md:col-span-2">
+      <img src={`${base}/website-logo.png`} alt="SWEN" class="h-10 w-auto mb-5" />
+      <p class="text-ink-soft leading-relaxed max-w-md">
+        Software Engineering Research Group · DISIM · Università degli Studi dell'Aquila · Via Vetoio, 67100 L'Aquila, Italy
+      </p>
+    </div>
+    <div>
+      <p class="smallcaps mb-3">Research</p>
+      <ul class="space-y-2 text-ink-soft">
+        <li><a href={`${base}/labs/modes-lab`} class="hover:text-brand-magenta">MODES Lab ↗</a></li>
+        <li><a href={`${base}/labs/spencer-lab`} class="hover:text-brand-magenta">SPENCER Lab ↗</a></li>
+        <li><a href={`${base}/labs/sosy-group`} class="hover:text-brand-magenta">SoSy Group ↗</a></li>
+        <li><a href={`${base}/labs/framelab`} class="hover:text-brand-magenta">FrAmeLab ↗</a></li>
+        <li><a href={`${base}/software`} class="hover:text-brand-magenta">Software & Tools</a></li>
+        <li><a href={`${base}/talks`} class="hover:text-brand-magenta">SWEN Talks</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="smallcaps mb-3">More</p>
+      <ul class="space-y-2 text-ink-soft">
+        <li><a href={`${base}/positions`} class="hover:text-brand-magenta">Open positions</a></li>
+        <li><a href={`${base}/contact`} class="hover:text-brand-magenta">Contact</a></li>
+        <li>LinkedIn</li>
+        <li>RSS feed</li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-rule">
+    <div class="max-w-6xl mx-auto px-6 py-6 flex flex-wrap justify-between items-center text-xs text-ink-mute">
+      <p>© {year} SWEN Group · Università degli Studi dell'Aquila</p>
+      <p>Built with Astro · Content from Notion · Publications from DBLP</p>
+    </div>
+  </div>
+</footer>

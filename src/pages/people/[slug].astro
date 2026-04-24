@@ -1,0 +1,167 @@
+---
+import Base from '../../layouts/Base.astro';
+import {
+  people, projects, talks, labs, software,
+  labAccent, initials, BASE, fmtMonth,
+} from '../../lib/resolve';
+
+export async function getStaticPaths() {
+  // @ts-ignore — dynamic import of generated data
+  const { people: p } = await import('../../lib/resolve');
+  // Only generate pages for people with a long bio (template decision).
+  return p
+    .filter((person: any) => (person.longBio ?? '').trim().length > 0)
+    .map((person: any) => ({
+      params: { slug: person.slug },
+      props: { person },
+    }));
+}
+
+const { person } = Astro.props as { person: typeof people[number] };
+
+const roleLabel: Record<string, string> = {
+  'PO': 'Full Professor',
+  'PA': 'Associate Professor',
+  'RTD-B': 'Assistant Professor (RTD-B)',
+  'RTD-A': 'Assistant Professor (RTD-A)',
+  'PostDoc': 'Postdoc',
+  'PhD': 'PhD Student',
+};
+
+/* Best-effort: find the person's lab via Notion relation (Lab.headIds) or text match in Lab.headText */
+const personLab = labs.find((l) =>
+  l.headIds.includes(person.id) || l.headText.toLowerCase().includes(person.name.toLowerCase()),
+);
+const labA = personLab ? labAccent(personLab.name) : null;
+
+/* Projects this person is PI or team on */
+const personProjects = projects.filter(
+  (p) => p.piIds.includes(person.id) || p.teamIds.includes(person.id),
+);
+
+/* Talks given by this person as internal speaker */
+const personTalks = talks.filter(
+  (t) => t.relatedPeopleIds.includes(person.id) || t.speaker.toLowerCase().includes(person.name.toLowerCase()),
+);
+
+/* Software this person maintains */
+const personSoftware = software.filter((s) => s.maintainerIds.includes(person.id));
+---
+<Base title={`${person.name} — SWEN`} description={person.shortBio || person.longBio.slice(0, 160)}>
+
+  <section class="max-w-5xl mx-auto px-6 pt-16 pb-10">
+    <a href={`${BASE}/people`} class="text-xs text-ink-mute hover:text-ink">← All people</a>
+    <div class="grid md:grid-cols-[180px_1fr] gap-10 mt-10 items-start">
+      <div class="avatar aspect-[4/5] w-full rounded-2xl text-3xl">
+        {person.photo
+          ? <img src={person.photo} alt={person.name} class="w-full h-full object-cover rounded-2xl" />
+          : <span>{initials(person.name)}</span>}
+      </div>
+      <div>
+        <div class="flex items-center gap-3 mb-3 flex-wrap">
+          {personLab && labA && (
+            <span class="chip" style={`background: ${labA.chipBg}; color: ${labA.chipFg};`}>
+              {personLab.name}
+            </span>
+          )}
+          {person.role && (
+            <span class="text-xs text-ink-mute">{roleLabel[person.role] ?? person.role}</span>
+          )}
+        </div>
+        <h1 class="display text-5xl mb-3">{person.name}</h1>
+        <p class="text-ink-soft mb-5">
+          {roleLabel[person.role ?? ''] ?? ''} · DISIM · Università degli Studi dell'Aquila
+        </p>
+        <div class="flex flex-wrap items-center gap-4 text-sm">
+          {person.email && <a href={`mailto:${person.email}`} class="hover:text-brand-magenta">{person.email}</a>}
+          {person.scholar && <><span class="text-rule">·</span><a href={person.scholar} class="hover:text-brand-magenta" target="_blank" rel="noopener">Scholar ↗</a></>}
+          {person.dblpPid && <><span class="text-rule">·</span><a href={`https://dblp.org/pid/${person.dblpPid}`} class="hover:text-brand-magenta" target="_blank" rel="noopener">DBLP ↗</a></>}
+          {person.orcid && <><span class="text-rule">·</span><a href={`https://orcid.org/${person.orcid}`} class="hover:text-brand-magenta" target="_blank" rel="noopener">ORCID ↗</a></>}
+          {person.linkedin && <><span class="text-rule">·</span><a href={person.linkedin} class="hover:text-brand-magenta" target="_blank" rel="noopener">LinkedIn ↗</a></>}
+          {person.github && <><span class="text-rule">·</span><a href={`https://github.com/${person.github}`} class="hover:text-brand-magenta" target="_blank" rel="noopener">GitHub ↗</a></>}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-5xl mx-auto px-6 py-10 grid md:grid-cols-[1fr_260px] gap-12 border-t border-rule">
+    <div>
+      <h2 class="smallcaps mb-5">Bio</h2>
+      {person.longBio.split('\n\n').map((para) => <p class="text-ink-soft leading-relaxed mb-4">{para}</p>)}
+    </div>
+    <aside class="text-sm space-y-8">
+      {person.interests.length > 0 && (
+        <div>
+          <p class="smallcaps mb-3">Research interests</p>
+          <div class="flex flex-wrap gap-2">
+            {person.interests.map((tag) => <span class="chip bg-cream text-ink-soft">{tag}</span>)}
+          </div>
+        </div>
+      )}
+      {personLab && (
+        <div>
+          <p class="smallcaps mb-3">Affiliation</p>
+          <ul class="space-y-2 text-ink-soft">
+            <li><a href={`${BASE}/labs/${personLab.slug}`} class="hover:text-brand-magenta">{personLab.name} →</a></li>
+            <li>DISIM · UnivAQ</li>
+          </ul>
+        </div>
+      )}
+    </aside>
+  </section>
+
+  {personProjects.length > 0 && (
+    <section class="max-w-5xl mx-auto px-6 py-10 border-t border-rule">
+      <h2 class="display text-3xl mb-5">Active projects</h2>
+      <ul>
+        {personProjects.map((p) => (
+          <li class="py-4 border-b border-rule">
+            <a href={`${BASE}/projects/${p.slug}`} class="block">
+              <p class="smallcaps" style="color: var(--color-brand-magenta, #9A1A5A)">
+                {p.funding} · {p.acronym || p.name}
+              </p>
+              <p class="font-serif text-base mt-1">{p.name}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {personTalks.length > 0 && (
+    <section class="bg-cream border-t border-rule">
+      <div class="max-w-5xl mx-auto px-6 py-12">
+        <h2 class="display text-3xl mb-5">Recent SWEN Talks</h2>
+        <ul>
+          {personTalks.slice(0, 5).map((t) => (
+            <li class="py-4 border-b border-rule">
+              <p class="font-serif text-base">{t.title}</p>
+              <p class="text-xs text-ink-mute mt-1">{fmtMonth(t.date)}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  {personSoftware.length > 0 && (
+    <section class="max-w-5xl mx-auto px-6 py-10 border-t border-rule">
+      <h2 class="display text-3xl mb-5">Software maintained</h2>
+      <ul>
+        {personSoftware.map((s) => (
+          <li class="py-3 border-b border-rule">
+            <a href={`${BASE}/software`} class="font-serif text-base hover:text-brand-magenta">{s.name}</a>
+            <p class="text-xs text-ink-mute mt-1">{s.shortDescription}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <section class="max-w-5xl mx-auto px-6 py-12 border-t border-rule">
+    <p class="text-xs text-ink-mute italic">
+      Publications list (auto-fetched from DBLP by PID) will appear here once the DBLP fetcher is wired — coming in batch 3.
+    </p>
+  </section>
+
+</Base>

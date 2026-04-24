@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import { labs, labAccent, BASE } from '../lib/resolve';
+
+const labsAlphabetical = [...labs].sort((a, b) => a.name.localeCompare(b.name));
+---
+<Base title="Research — SWEN" description="Research lines and labs of the SWEN group: model-driven engineering, software performance, synthesis, architecture, quality.">
+  <section class="max-w-6xl mx-auto px-6 pt-16 pb-20">
+    <p class="smallcaps mb-6">Research</p>
+    <h1 class="display text-5xl mb-8 max-w-3xl">Research at SWEN spans the full lifecycle of software systems.</h1>
+    <p class="text-lg text-ink-soft max-w-3xl leading-relaxed">
+      We work across methods (model-driven, search-based, empirical), concerns (performance, quality, sustainability),
+      and domains (cloud, IoT, AI-intensive systems). Our research is organised across {labs.length} labs that complement
+      each other methodologically and thematically.
+    </p>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-6">
+    {labsAlphabetical.map((lab) => {
+      const a = labAccent(lab.name);
+      return (
+        <a href={`${BASE}/labs/${lab.slug}`} class="flex flex-col p-8 rounded-2xl border border-rule bg-white relative overflow-hidden hover:-translate-y-1 transition-all">
+          <span class="absolute top-0 left-0 right-0 h-1" style={`background: ${a.bar};`}></span>
+          <p class="smallcaps mb-3" style={`color: ${a.chipFg};`}>{lab.name}</p>
+          <h2 class="display text-2xl mb-4">{lab.acronym ? lab.acronym : lab.name}</h2>
+          <p class="text-sm text-ink-soft leading-relaxed flex-1">{lab.description}</p>
+          <p class="text-xs text-ink-mute mt-6 pt-4 border-t border-rule">Lead: {lab.headText || '—'}</p>
+        </a>
+      );
+    })}
+  </section>
+</Base>

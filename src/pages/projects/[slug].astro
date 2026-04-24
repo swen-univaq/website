@@ -1,0 +1,84 @@
+---
+import Base from '../../layouts/Base.astro';
+import { projects, people, labs, labAccent, fmtMonth, BASE } from '../../lib/resolve';
+
+export async function getStaticPaths() {
+  const { projects: ps } = await import('../../lib/resolve');
+  return ps.map((project: any) => ({ params: { slug: project.slug }, props: { project } }));
+}
+
+const { project } = Astro.props as { project: typeof projects[number] };
+
+const projectLab = project.labIds.length > 0 ? labs.find((l) => l.id === project.labIds[0]) : null;
+const a = projectLab ? labAccent(projectLab.name) : { bar: '#44546b', chipBg: '#f5f3ef', chipFg: '#44546b' };
+
+const pis = project.piIds.map((id) => people.find((p) => p.id === id)).filter(Boolean);
+const team = project.teamIds.map((id) => people.find((p) => p.id === id)).filter(Boolean);
+---
+<Base title={`${project.acronym || project.name} — SWEN`} description={project.description.slice(0, 160)}>
+  <section class="max-w-4xl mx-auto px-6 pt-16 pb-12">
+    <a href={`${BASE}/projects`} class="text-xs text-ink-mute hover:text-ink">← All projects</a>
+    <div class="mt-8 flex items-baseline gap-4 flex-wrap">
+      <span class="chip" style={`background: ${a.chipBg}; color: ${a.chipFg};`}>{project.funding || 'Grant'}</span>
+      {project.grantId && <p class="font-mono text-xs text-ink-mute">{project.grantId}</p>}
+    </div>
+    <h1 class="display text-5xl mt-5 mb-6">{project.acronym || project.name}</h1>
+    {project.acronym && project.acronym !== project.name && (
+      <p class="text-xl font-serif text-ink-soft mb-10 leading-snug">{project.name}.</p>
+    )}
+
+    <div class="grid sm:grid-cols-3 gap-6 py-6 border-y border-rule mb-10">
+      <div>
+        <p class="smallcaps mb-2">Period</p>
+        <p>
+          {project.periodStart ? fmtMonth(project.periodStart) : '—'}
+          {project.periodEnd ? ` – ${fmtMonth(project.periodEnd)}` : project.periodStart ? ' – ongoing' : ''}
+        </p>
+      </div>
+      <div>
+        <p class="smallcaps mb-2">SWEN Lab</p>
+        {projectLab
+          ? <p><a href={`${BASE}/labs/${projectLab.slug}`} class="hover:text-brand-magenta">{projectLab.name}</a></p>
+          : <p class="text-ink-mute">—</p>}
+      </div>
+      <div>
+        <p class="smallcaps mb-2">Project site</p>
+        {project.website
+          ? <a href={project.website} target="_blank" rel="noopener" class="hover:underline" style={`color: ${a.chipFg};`}>{project.website.replace(/^https?:\/\//, '').replace(/\/$/, '')} ↗</a>
+          : <p class="text-ink-mute">—</p>}
+      </div>
+    </div>
+
+    <div class="prose prose-lg max-w-none">
+      {project.description.split('\n\n').map((para) => <p class="text-ink-soft leading-relaxed mb-4">{para}</p>)}
+    </div>
+
+    {(pis.length > 0 || team.length > 0) && (
+      <div class="mt-12 grid sm:grid-cols-2 gap-8">
+        {pis.length > 0 && (
+          <div>
+            <h2 class="display text-2xl mb-4">PI</h2>
+            <ul class="text-sm space-y-2">
+              {pis.map((p: any) => <li><a href={`${BASE}/people/${p.slug}`} class="hover:text-brand-magenta">{p.name}</a></li>)}
+            </ul>
+          </div>
+        )}
+        {team.length > 0 && (
+          <div>
+            <h2 class="display text-2xl mb-4">SWEN team</h2>
+            <ul class="text-sm space-y-2">
+              {team.map((p: any) => <li><a href={`${BASE}/people/${p.slug}`} class="hover:text-brand-magenta">{p.name}</a></li>)}
+            </ul>
+          </div>
+        )}
+      </div>
+    )}
+
+    {project.partners && (
+      <div class="mt-10">
+        <h2 class="display text-2xl mb-4">Partners</h2>
+        <p class="text-sm text-ink-soft">{project.partners}</p>
+      </div>
+    )}
+  </section>
+</Base>

@@ -1,0 +1,41 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const current = Astro.url.pathname.replace(base, '') || '/';
+
+const links = [
+  { href: '/',         label: 'Home'     },
+  { href: '/research', label: 'Research' },
+  { href: '/people',   label: 'People'   },
+  { href: '/talks',    label: 'Talks'    },
+  { href: '/projects', label: 'Projects' },
+  { href: '/news',     label: 'News'     },
+];
+
+function isActive(path: string): boolean {
+  if (path === '/') return current === '/' || current === '';
+  return current.startsWith(path);
+}
+---
+<header class="sticky top-0 z-40 bg-paper/95 backdrop-blur border-b border-rule">
+  <div class="gradient-bar h-0.5"></div>
+  <div class="max-w-6xl mx-auto px-6 h-[72px] flex items-center justify-between">
+    <a href={`${base}/`} class="flex items-center" aria-label="SWEN home">
+      <img src={`${base}/website-logo.png`} alt="SWEN Research Group" class="h-10 w-auto" />
+    </a>
+    <nav class="flex items-center gap-9 text-sm">
+      {links.map(({ href, label }) => (
+        <a
+          href={`${base}${href === '/' ? '' : href}`}
+          class:list={[
+            'pb-1 border-b-2 border-transparent font-medium transition-colors',
+            isActive(href)
+              ? 'text-brand-magenta border-brand-magenta'
+              : 'hover:text-brand-magenta',
+          ]}
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,128 @@
+---
+import Base from '../../layouts/Base.astro';
+import {
+  labs, people, projects, software, talks,
+  labAccent, initials, BASE,
+} from '../../lib/resolve';
+
+export async function getStaticPaths() {
+  const { labs: ls } = await import('../../lib/resolve');
+  return ls.map((lab: any) => ({ params: { slug: lab.slug }, props: { lab } }));
+}
+
+const { lab } = Astro.props as { lab: typeof labs[number] };
+const a = labAccent(lab.name);
+
+/* Team: heads (via relation) + people whose interests match lab research lines (best effort) */
+const heads = lab.headIds.map((id) => people.find((p) => p.id === id)).filter(Boolean);
+const relatedLines = new Set(lab.researchLines.map((l) => l.toLowerCase()));
+const team = people
+  .filter((p) =>
+    lab.headIds.includes(p.id) ||
+    p.interests.some((i) => Array.from(relatedLines).some((rl) => i.toLowerCase().includes(rl.split(' ')[0]))),
+  )
+  .slice(0, 12);
+
+const labProjects = projects.filter((p) => p.labIds.includes(lab.id));
+const labSoftware = software.filter((s) => s.relatedLabIds.includes(lab.id));
+---
+<Base title={`${lab.name} — SWEN`} description={lab.description.slice(0, 160)}>
+
+  <section class="max-w-6xl mx-auto px-6 pt-16 pb-12">
+    <a href={`${BASE}/`} class="text-xs text-ink-mute hover:text-ink">← Back to home</a>
+    <div class="flex items-center gap-3 mt-8 mb-4">
+      <span class="h-1 w-8 rounded-full" style={`background: ${a.bar};`}></span>
+      <p class="smallcaps">{lab.name} · Research Lab at SWEN</p>
+    </div>
+    <h1 class="display text-5xl mb-8">{lab.acronym || lab.name}</h1>
+    <div class="grid md:grid-cols-3 gap-8 mb-12">
+      <div class="md:col-span-2">
+        <p class="text-lg text-ink-soft leading-relaxed">{lab.description}</p>
+      </div>
+      <aside class="text-sm">
+        <div class="border-t border-rule pt-4">
+          <p class="smallcaps mb-2">Lead</p>
+          {heads.length > 0
+            ? heads.map((h: any) => <p class="font-serif text-base">{h.name}</p>)
+            : <p class="font-serif text-base">{lab.headText}</p>}
+        </div>
+        {lab.website && (
+          <div class="border-t border-rule pt-4 mt-6">
+            <p class="smallcaps mb-2">External site</p>
+            <a href={lab.website} target="_blank" rel="noopener" class="hover:underline" style={`color: ${a.chipFg};`}>
+              {lab.website.replace(/^https?:\/\//, '').replace(/\/$/, '')} ↗
+            </a>
+          </div>
+        )}
+        {lab.researchLines.length > 0 && (
+          <div class="border-t border-rule pt-4 mt-6">
+            <p class="smallcaps mb-2">Topics</p>
+            <p class="text-ink-soft">{lab.researchLines.join(' · ')}</p>
+          </div>
+        )}
+      </aside>
+    </div>
+  </section>
+
+  {team.length > 0 && (
+    <section class="bg-cream border-y border-rule">
+      <div class="max-w-6xl mx-auto px-6 py-16">
+        <h2 class="display text-3xl mb-8">Team</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+          {team.map((p) => (
+            <a href={`${BASE}/people/${p!.slug}`} class="block">
+              <div class="avatar aspect-square w-full mb-2 rounded-full text-sm">
+                {p!.photo
+                  ? <img src={p!.photo} alt={p!.name} class="w-full h-full object-cover rounded-full" />
+                  : <span>{initials(p!.name)}</span>}
+              </div>
+              <p class="text-sm">{p!.name}</p>
+              {lab.headIds.includes(p!.id) && <p class="text-xs text-ink-mute">Lead</p>}
+            </a>
+          ))}
+        </div>
+        <p class="mt-4 text-xs text-ink-mute italic">
+          Team shown is illustrative — populate the Lab ↔ People relation in Notion for an accurate list.
+        </p>
+      </div>
+    </section>
+  )}
+
+  <section class="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-16">
+    <div>
+      <h2 class="display text-3xl mb-6">Active projects</h2>
+      {labProjects.length > 0 ? (
+        <ul class="border-t border-rule">
+          {labProjects.map((p) => (
+            <li class="py-4 border-b border-rule">
+              <a href={`${BASE}/projects/${p.slug}`} class="block">
+                <p class="smallcaps" style={`color: ${a.chipFg};`}>{p.funding} · {p.acronym}</p>
+                <p class="font-serif text-lg mt-1">{p.name}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="text-sm text-ink-mute italic">Lab ↔ Projects relation not populated yet.</p>
+      )}
+    </div>
+    <div>
+      <h2 class="display text-3xl mb-6">Software & publications</h2>
+      {labSoftware.length > 0 ? (
+        <ul class="border-t border-rule">
+          {labSoftware.map((s) => (
+            <li class="py-4 border-b border-rule">
+              <a href={`${BASE}/software`} class="block">
+                <p class="smallcaps" style={`color: ${a.chipFg};`}>{s.category}</p>
+                <p class="font-serif text-lg mt-1">{s.name}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="text-sm text-ink-mute italic">Publications auto-fetched from DBLP will appear here (batch 3).</p>
+      )}
+    </div>
+  </section>
+
+</Base>

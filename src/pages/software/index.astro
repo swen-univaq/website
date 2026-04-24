@@ -1,0 +1,74 @@
+---
+import Base from '../../layouts/Base.astro';
+import { software, labs, labAccent, BASE } from '../../lib/resolve';
+
+const visible = software.filter((s) => s.status !== 'Archived');
+---
+<Base title="Software — SWEN" description="Academic software maintained by the SWEN group: open-source frameworks, tools, and libraries used in research and teaching.">
+  <section class="max-w-6xl mx-auto px-6 pt-16 pb-12">
+    <p class="smallcaps mb-6">Software & Tools</p>
+    <h1 class="display text-5xl mb-4 max-w-3xl">Research we ship</h1>
+    <p class="text-lg text-ink-soft max-w-3xl leading-relaxed">
+      SWEN actively develops and maintains academic software used in research and education worldwide.
+      Our tools span model-driven engineering, software performance analysis, software architecture,
+      and recommender systems for developers. Contributions are welcome.
+    </p>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-6 pb-20">
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {visible.map((s) => {
+        const relatedLab = s.relatedLabIds.length > 0 ? labs.find((l) => l.id === s.relatedLabIds[0]) : null;
+        const a = relatedLab ? labAccent(relatedLab.name) : { bar: '#44546b', chipBg: '#f5f3ef', chipFg: '#44546b' };
+        return (
+          <a href={s.repository || s.website || '#'} target="_blank" rel="noopener"
+             class="group relative flex flex-col p-7 rounded-2xl border border-rule hover:-translate-y-1 transition-all bg-white overflow-hidden min-h-[300px]">
+            <span class="absolute top-0 left-0 right-0 h-1" style={`background: ${a.bar};`}></span>
+            <div class="flex items-center justify-between mt-2 mb-5">
+              <span class="chip" style={`background: ${a.chipBg}; color: ${a.chipFg};`}>
+                {s.category || 'Tool'}
+              </span>
+              <span class="text-xs text-ink-mute">{s.status}</span>
+            </div>
+            <h3 class="display text-2xl mb-3">{s.name}</h3>
+            <p class="text-sm text-ink-soft leading-relaxed flex-1">{s.shortDescription}</p>
+            <div class="mt-6 pt-4 border-t border-rule">
+              <div class="flex items-center justify-between text-xs text-ink-mute mb-3">
+                <span class="font-mono">{s.language.join(' · ') || '—'}{s.license ? ` · ${s.license}` : ''}</span>
+                {relatedLab && <span>{relatedLab.name}</span>}
+              </div>
+              <div class="flex items-center gap-4 text-xs">
+                {s.website && <a href={s.website} target="_blank" rel="noopener" class="font-medium hover:underline" style={`color: ${a.chipFg};`}>{s.website.replace(/^https?:\/\//, '').replace(/\/$/, '')} ↗</a>}
+                {s.repository && !s.website && <a href={s.repository} target="_blank" rel="noopener" class="font-medium hover:underline" style={`color: ${a.chipFg};`}>Repo ↗</a>}
+                {s.paper && <a href={s.paper} target="_blank" rel="noopener" class="hover:underline" style={`color: ${a.chipFg};`}>Paper ↗</a>}
+              </div>
+            </div>
+          </a>
+        );
+      })}
+
+      <div class="group relative flex flex-col p-7 rounded-2xl border border-dashed border-rule bg-cream/30 overflow-hidden min-h-[300px]">
+        <div class="flex items-center justify-between mt-2 mb-5">
+          <span class="chip text-ink-mute bg-white border border-rule">Add your tool</span>
+        </div>
+        <h3 class="display text-2xl mb-3 text-ink-soft">Maintain a tool?</h3>
+        <p class="text-sm text-ink-soft leading-relaxed flex-1">
+          If you're a SWEN member and maintain academic software, add it via the Notion database.
+        </p>
+        <div class="mt-6 pt-4 border-t border-rule text-xs text-ink-mute">Open to SWEN members</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cream border-y border-rule">
+    <div class="max-w-4xl mx-auto px-6 py-16">
+      <p class="smallcaps mb-4">Our commitment</p>
+      <h2 class="display text-3xl mb-6">Research software is a first-class output</h2>
+      <p class="text-ink-soft leading-relaxed">
+        We believe tools and datasets are as important as papers. All our software is open-source,
+        actively maintained, and documented. Contributions, bug reports, and academic collaborations are welcome —
+        see each tool's repository for contribution guidelines.
+      </p>
+    </div>
+  </section>
+</Base>

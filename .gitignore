@@ -1,0 +1,34 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# env
+.env
+.env.local
+.env.production
+
+# generated Notion cache (optional: commit if you want build determinism)
+src/data/generated/
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# editors
+.vscode/
+.idea/
+.DS_Store
+
+# OS
+Thumbs.db
+
+# Safety net - secret files
+.end
+.env*
+!.env.example

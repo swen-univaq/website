@@ -1,0 +1,45 @@
+---
+import Base from '../../layouts/Base.astro';
+import { projects, labs, labAccent, fmtMonth, BASE } from '../../lib/resolve';
+
+const active = projects.filter((p) => p.status === 'Active');
+const byYear = [...active].sort((a, b) => (b.periodStart ?? '').localeCompare(a.periodStart ?? ''));
+
+function fundingAccent(funding: string | null): string {
+  if (funding?.toLowerCase().includes('horizon')) return '#9A1A5A';
+  if (funding?.toLowerCase().includes('prin'))    return '#F26A1F';
+  if (funding?.toLowerCase().includes('pnrr'))    return '#E91E5A';
+  if (funding?.toLowerCase().includes('eu'))      return '#9A1A5A';
+  return '#44546b';
+}
+---
+<Base title="Projects — SWEN" description={`${active.length} active research grants led or co-led by SWEN researchers.`}>
+  <section class="max-w-6xl mx-auto px-6 pt-16 pb-12">
+    <p class="smallcaps mb-6">Projects</p>
+    <h1 class="display text-5xl mb-4">{active.length} active research grants</h1>
+    <p class="text-ink-soft max-w-2xl">
+      Horizon Europe, PNRR, and PRIN grants led or co-led by SWEN researchers. Industrial collaborations are listed separately.
+    </p>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-6 pb-20 border-t border-rule">
+    {byYear.map((p) => {
+      const fg = fundingAccent(p.funding);
+      return (
+        <a href={`${BASE}/projects/${p.slug}`} class="block py-8 border-b border-rule grid md:grid-cols-[160px_1fr_auto] gap-6 hover:bg-cream px-4 -mx-4">
+          <div>
+            <p class="smallcaps" style={`color: ${fg};`}>{p.funding}</p>
+            <p class="font-mono text-xs text-ink-mute mt-1">{p.acronym}</p>
+          </div>
+          <div>
+            <h3 class="font-serif text-xl mb-2">{p.name}</h3>
+            <p class="text-sm text-ink-soft leading-relaxed">{p.description.slice(0, 240)}{p.description.length > 240 ? '…' : ''}</p>
+          </div>
+          <div class="text-xs text-ink-mute md:text-right md:self-center">
+            {p.periodStart ? fmtMonth(p.periodStart) : ''}{p.periodEnd ? ` – ${fmtMonth(p.periodEnd)}` : p.periodStart ? ' – ongoing' : ''}
+          </div>
+        </a>
+      );
+    })}
+  </section>
+</Base>

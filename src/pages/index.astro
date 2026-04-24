@@ -1,0 +1,196 @@
+---
+import Base from '../layouts/Base.astro';
+
+/* ----- Load generated Notion JSON (written by scripts/fetch-notion.ts) ----- */
+// These imports are resolved at build time. If the files don't exist yet,
+// run `pnpm fetch:notion` first (or `pnpm build` which does it automatically).
+
+// @ts-expect-error — generated at build time
+import peopleData from '../data/generated/people.json';
+// @ts-expect-error — generated at build time
+import labsData from '../data/generated/labs.json';
+// @ts-expect-error — generated at build time
+import projectsData from '../data/generated/projects.json';
+// @ts-expect-error — generated at build time
+import talksData from '../data/generated/talks.json';
+
+type Person   = { id: string; slug: string; name: string; role: string | null; order: number; };
+type Lab      = { id: string; slug: string; name: string; acronym: string; description: string; headIds: string[]; headText: string; website: string | null; order: number; };
+type Project  = { id: string; slug: string; name: string; acronym: string; funding: string | null; periodStart: string | null; periodEnd: string | null; description: string; status: string; };
+type Talk     = { id: string; slug: string; title: string; speaker: string; affiliation: string; external: boolean; date: string | null; abstract: string; };
+
+const people   = peopleData   as Person[];
+const labs     = labsData     as Lab[];
+const projects = projectsData as Project[];
+const talks    = talksData    as Talk[];
+
+/* ----- Stats for the key-facts strip ----- */
+const phdCount    = people.filter((p) => p.role === 'PhD').length;
+const peopleCount = people.length;
+const labsCount   = labs.length;
+const activeGrants = projects.filter((p) => p.status === 'Active').length;
+
+/* ----- Featured recent talks (top 3 most recent) ----- */
+const recentTalks = talks.slice(0, 3);
+
+/* ----- Color + base helpers ----- */
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const LAB_ACCENT: Record<string, { bar: string; chipBg: string; chipFg: string; border: string }> = {
+  'MODES Lab':   { bar: '#9A1A5A', chipBg: 'color-mix(in oklch, #9A1A5A 12%, white)', chipFg: '#9A1A5A', border: '#9A1A5A' },
+  'SPENCER Lab': { bar: '#E91E5A', chipBg: 'color-mix(in oklch, #E91E5A 12%, white)', chipFg: '#E91E5A', border: '#E91E5A' },
+  'SoSy Group':  { bar: '#F26A1F', chipBg: 'color-mix(in oklch, #F26A1F 14%, white)', chipFg: '#F26A1F', border: '#F26A1F' },
+  'FrAmeLab':    { bar: '#FCB51A', chipBg: 'color-mix(in oklch, #FCB51A 18%, white)', chipFg: '#A06B00', border: '#FCB51A' },
+};
+function accent(labName: string) {
+  return LAB_ACCENT[labName] ?? LAB_ACCENT['MODES Lab'];
+}
+
+/* Sort labs alphabetically for the grid */
+const labsAlphabetical = [...labs].sort((a, b) => a.name.localeCompare(b.name));
+---
+
+<Base>
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6 pt-24 pb-28 relative z-10">
+      <div class="max-w-4xl">
+        <div class="flex items-center gap-3 mb-10">
+          <span class="gradient-bar h-1 w-10 rounded-full"></span>
+          <span class="smallcaps">Software Engineering · DISIM · Università dell'Aquila</span>
+        </div>
+        <h1 class="display-tight text-5xl md:text-7xl leading-[0.98] mb-10">
+          We <span class="gradient-text">design</span>, <span class="gradient-text">build</span>, and <span class="gradient-text">reason about</span> software systems that perform, adapt, and last.
+        </h1>
+        <p class="text-lg text-ink-soft max-w-2xl leading-relaxed">
+          SWEN brings together <strong class="text-ink">{peopleCount} researchers</strong> across model-driven engineering, software architecture, performance, and quality. We publish at top venues, coordinate national projects, ship open-source software, and train the next generation of software engineers in L'Aquila.
+        </p>
+        <div class="mt-12 flex items-center gap-4 flex-wrap">
+          <a href={`${base}/research`} class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-ink text-white text-sm font-medium hover:bg-brand-magenta transition-colors">
+            Explore our research <span aria-hidden="true">→</span>
+          </a>
+          <a href={`${base}/software`} class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-rule text-sm font-medium hover:border-ink">
+            Our software
+          </a>
+          <a href={`${base}/positions`} class="inline-flex items-center gap-2 text-sm text-ink-mute hover:text-ink ml-2">
+            Join us →
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="absolute -top-20 -right-20 w-96 h-96 rounded-full opacity-[0.08] blur-3xl pointer-events-none"
+         style="background: linear-gradient(135deg, #9A1A5A, #F26A1F, #FCB51A);"></div>
+  </section>
+
+  <!-- Key facts -->
+  <section class="border-y border-rule">
+    <div class="max-w-6xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div>
+        <div class="flex items-baseline gap-2">
+          <div class="display text-5xl">{peopleCount}</div>
+          <span class="h-2 w-2 rounded-full bg-brand-magenta"></span>
+        </div>
+        <div class="smallcaps mt-3">Researchers</div>
+      </div>
+      <div>
+        <div class="flex items-baseline gap-2">
+          <div class="display text-5xl">{labsCount}</div>
+          <span class="h-2 w-2 rounded-full bg-brand-pink"></span>
+        </div>
+        <div class="smallcaps mt-3">Research Labs</div>
+      </div>
+      <div>
+        <div class="flex items-baseline gap-2">
+          <div class="display text-5xl">{activeGrants}</div>
+          <span class="h-2 w-2 rounded-full bg-brand-orange"></span>
+        </div>
+        <div class="smallcaps mt-3">Active Grants</div>
+      </div>
+      <div>
+        <div class="flex items-baseline gap-2">
+          <div class="display text-5xl">{phdCount}</div>
+          <span class="h-2 w-2 rounded-full bg-brand-amber"></span>
+        </div>
+        <div class="smallcaps mt-3">PhD Students</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Labs -->
+  <section class="max-w-6xl mx-auto px-6 py-28">
+    <div class="flex items-end justify-between mb-12 flex-wrap gap-4">
+      <div>
+        <p class="smallcaps mb-3">Research Labs</p>
+        <h2 class="display text-5xl">{labs.length === 1 ? 'One lab' : `${labs.length} labs`}, one group.</h2>
+      </div>
+      <a href={`${base}/research`} class="text-sm font-medium hover:text-brand-magenta">All research lines →</a>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+      {labsAlphabetical.map((lab) => {
+        const a = accent(lab.name);
+        return (
+          <a
+            href={`${base}/labs/${lab.slug}`}
+            class="group relative flex flex-col p-7 rounded-2xl border border-rule hover:-translate-y-1 transition-all bg-white overflow-hidden"
+            style={`--hover-border: ${a.border};`}
+            onmouseover={`this.style.borderColor='${a.border}'`}
+            onmouseout={`this.style.borderColor=''`}
+          >
+            <span class="absolute top-0 left-0 right-0 h-1" style={`background: ${a.bar};`}></span>
+            <div class="chip self-start mt-2 mb-5" style={`background: ${a.chipBg}; color: ${a.chipFg};`}>
+              {lab.name}
+            </div>
+            <h3 class="display text-xl mb-3 leading-tight">{lab.description ? lab.description.split('.')[0].slice(0, 60) : lab.name}</h3>
+            <p class="text-sm text-ink-soft leading-relaxed flex-1">{(lab.description ?? '').slice(0, 140)}...</p>
+            <div class="flex items-center justify-between text-xs mt-8 pt-4 border-t border-rule">
+              <span class="text-ink-mute">Lead: {lab.headText || '—'}</span>
+              <span style={`color: ${a.chipFg};`} class="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- SWEN Talks -->
+  {recentTalks.length > 0 && (
+    <section class="max-w-6xl mx-auto px-6 py-28 border-t border-rule">
+      <div class="flex items-end justify-between mb-12 flex-wrap gap-4">
+        <div>
+          <p class="smallcaps mb-3">SWEN Talks</p>
+          <h2 class="display text-5xl">Our seminar series.</h2>
+          <p class="text-ink-soft max-w-xl mt-4">A monthly research seminar featuring SWEN members and invited speakers from academia and industry.</p>
+        </div>
+        <a href={`${base}/talks`} class="text-sm font-medium hover:text-brand-magenta">All talks →</a>
+      </div>
+      <div class="grid md:grid-cols-3 gap-5">
+        {recentTalks.map((talk, i) => {
+          const palette = [
+            { bar: '#9A1A5A', bg: 'color-mix(in oklch, #9A1A5A 12%, white)', fg: '#9A1A5A' },
+            { bar: '#FCB51A', bg: 'color-mix(in oklch, #FCB51A 18%, white)', fg: '#A06B00' },
+            { bar: '#E91E5A', bg: 'color-mix(in oklch, #E91E5A 12%, white)', fg: '#E91E5A' },
+          ][i % 3];
+          return (
+            <a href={`${base}/talks`} class="group relative flex flex-col p-7 rounded-2xl border border-rule hover:-translate-y-1 transition-all bg-white overflow-hidden">
+              <span class="absolute top-0 left-0 right-0 h-1" style={`background: ${palette.bar};`}></span>
+              <div class="flex items-center justify-between mt-2 mb-5">
+                <span class="chip" style={`background: ${palette.bg}; color: ${palette.fg};`}>
+                  {talk.date ?? 'TBA'}
+                </span>
+                <span class="text-xs text-ink-mute">{talk.external ? 'External' : 'Internal'}</span>
+              </div>
+              <h3 class="display text-lg mb-3 leading-snug">{talk.title}</h3>
+              <p class="text-sm text-ink-soft leading-relaxed flex-1 line-clamp-3">{talk.abstract.slice(0, 160)}...</p>
+              <div class="mt-6 pt-4 border-t border-rule text-xs">
+                <p class="font-serif text-sm text-ink">{talk.speaker}</p>
+                <p class="mt-1 text-ink-mute">{talk.affiliation}</p>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  )}
+
+</Base>
