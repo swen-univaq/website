@@ -193,70 +193,46 @@
   </section>
 
   <!-- Software -->
-  <section class="max-w-6xl mx-auto px-6 py-24 border-t border-[var(--color-rule)]">
-    <div class="flex items-end justify-between mb-10">
+  <section class="max-w-6xl mx-auto px-6 py-28 border-t border-[var(--color-rule)]">
+    <div class="flex items-end justify-between mb-12 flex-wrap gap-4">
       <div>
         <p class="smallcaps mb-3">Software & Tools</p>
-        <h2 class="display text-4xl">Research we ship</h2>
-        <p class="text-[var(--color-ink-soft)] max-w-xl mt-4">Academic software maintained by the group — open-source frameworks, tools, and libraries used in research and teaching worldwide.</p>
+        <h2 class="display text-5xl">Research we ship.</h2>
+        <p class="text-[var(--color-ink-soft)] max-w-xl mt-4">Academic software maintained by the group — open-source frameworks and tools used in research and teaching worldwide.</p>
       </div>
-      <a href="#software" class="text-sm text-[var(--color-accent)] hover:underline underline-offset-4">All software →</a>
+      <a href="#software" class="text-sm font-medium hover:text-[var(--color-brand-magenta)]">All software →</a>
     </div>
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-0 border-t border-[var(--color-rule)]">
-      <a href="#software" class="group p-6 border-b lg:border-r border-[var(--color-rule)] hover:bg-[var(--color-cream)] flex flex-col">
-        <div class="flex items-center gap-2 mb-4">
-          <span class="inline-block w-2 h-2 rounded-full bg-[var(--color-accent)]"></span>
-          <span class="smallcaps text-xs">MDE Framework</span>
-        </div>
-        <h3 class="font-serif text-xl mb-2">[Software 1]</h3>
-        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">One-line description of what this tool does and who uses it.</p>
-        <div class="flex items-center gap-4 mt-6 text-xs text-[var(--color-ink-mute)]">
-          <span class="font-mono">TypeScript</span>
-          <span>★ 000</span>
-          <span>GitHub ↗</span>
+    <div class="grid md:grid-cols-3 gap-5">
+      <a href="https://www.jjodel.io/" target="_blank" rel="noopener" class="group relative flex flex-col p-7 rounded-2xl border border-[var(--color-rule)] hover:border-[var(--color-brand-magenta)] hover:-translate-y-1 transition-all bg-white overflow-hidden">
+        <span class="absolute top-0 left-0 right-0 h-1 bg-[var(--color-brand-magenta)]"></span>
+        <div class="chip self-start mt-2 mb-5" style="background: color-mix(in oklch, var(--color-brand-magenta) 12%, white); color: var(--color-brand-magenta);">MDE Framework</div>
+        <h3 class="display text-2xl mb-3">Jjodel</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">A cloud-based reflective modeling platform. Real-time collaboration, live metamodel + model co-evolution, zero-setup for students and industry.</p>
+        <div class="flex items-center justify-between text-xs mt-8 pt-4 border-t border-[var(--color-rule)] text-[var(--color-ink-mute)]">
+          <span class="font-mono">TypeScript · Web</span>
+          <span class="text-[var(--color-brand-magenta)] opacity-0 group-hover:opacity-100 transition-opacity">jjodel.io ↗</span>
         </div>
       </a>
-      <a href="#software" class="group p-6 border-b lg:border-r border-[var(--color-rule)] hover:bg-[var(--color-cream)] flex flex-col">
-        <div class="flex items-center gap-2 mb-4">
-          <span class="inline-block w-2 h-2 rounded-full bg-[var(--color-accent)]"></span>
-          <span class="smallcaps text-xs">Library</span>
-        </div>
-        <h3 class="font-serif text-xl mb-2">[Software 2]</h3>
-        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Description goes here.</p>
-        <div class="flex items-center gap-4 mt-6 text-xs text-[var(--color-ink-mute)]">
-          <span class="font-mono">Java</span>
-          <span>★ 000</span>
-          <span>GitHub ↗</span>
+      <a href="https://jmt.sourceforge.net/" target="_blank" rel="noopener" class="group relative flex flex-col p-7 rounded-2xl border border-[var(--color-rule)] hover:border-[var(--color-brand-pink)] hover:-translate-y-1 transition-all bg-white overflow-hidden">
+        <span class="absolute top-0 left-0 right-0 h-1 bg-[var(--color-brand-pink)]"></span>
+        <div class="chip self-start mt-2 mb-5" style="background: color-mix(in oklch, var(--color-brand-pink) 12%, white); color: var(--color-brand-pink);">Performance Suite</div>
+        <h3 class="display text-2xl mb-3">JMT</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Open-source suite for queueing network modelling and workload analysis. Originally developed at Politecnico di Milano, now maintained under SWEN supervision.</p>
+        <div class="flex items-center justify-between text-xs mt-8 pt-4 border-t border-[var(--color-rule)] text-[var(--color-ink-mute)]">
+          <span class="font-mono">Java · GPL</span>
+          <span class="text-[var(--color-brand-pink)] opacity-0 group-hover:opacity-100 transition-opacity">sourceforge.net ↗</span>
         </div>
       </a>
-      <a href="#software" class="group p-6 border-b lg:border-r border-[var(--color-rule)] hover:bg-[var(--color-cream)] flex flex-col">
-        <div class="flex items-center gap-2 mb-4">
-          <span class="inline-block w-2 h-2 rounded-full bg-[var(--color-accent)]"></span>
-          <span class="smallcaps text-xs">Dataset</span>
-        </div>
-        <h3 class="font-serif text-xl mb-2">[Software 3]</h3>
-        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Description goes here.</p>
-        <div class="flex items-center gap-4 mt-6 text-xs text-[var(--color-ink-mute)]">
-          <span class="font-mono">Python</span>
-          <span>★ 000</span>
-          <span>GitHub ↗</span>
-        </div>
-      </a>
-      <a href="#software" class="group p-6 border-b border-[var(--color-rule)] hover:bg-[var(--color-cream)] flex flex-col">
-        <div class="flex items-center gap-2 mb-4">
-          <span class="inline-block w-2 h-2 rounded-full bg-[var(--color-accent)]"></span>
-          <span class="smallcaps text-xs">CLI Tool</span>
-        </div>
-        <h3 class="font-serif text-xl mb-2">[Software 4]</h3>
-        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Description goes here.</p>
-        <div class="flex items-center gap-4 mt-6 text-xs text-[var(--color-ink-mute)]">
-          <span class="font-mono">Rust</span>
-          <span>★ 000</span>
-          <span>GitHub ↗</span>
+      <a href="#software" class="group relative flex flex-col p-7 rounded-2xl border border-dashed border-[var(--color-rule)] hover:border-[var(--color-ink)] transition-all bg-[var(--color-cream)]/30 overflow-hidden">
+        <div class="chip self-start mt-2 mb-5 text-[var(--color-ink-mute)] bg-white border border-[var(--color-rule)]">More tools</div>
+        <h3 class="display text-2xl mb-3 text-[var(--color-ink-soft)]">Add your tool</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">SWEN members who maintain academic software can submit their tool to the Notion database — it will appear here after review.</p>
+        <div class="flex items-center justify-between text-xs mt-8 pt-4 border-t border-[var(--color-rule)] text-[var(--color-ink-mute)]">
+          <span>Open to SWEN members</span>
+          <span class="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
         </div>
       </a>
     </div>
-    <p class="mt-6 text-xs text-[var(--color-ink-mute)] italic">Placeholder cards — content to be provided in v2 of the mockup.</p>
   </section>
 
   <!-- Featured publications -->
@@ -872,123 +848,64 @@
   </section>
 
   <section class="max-w-6xl mx-auto px-6 pb-20">
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-l border-[var(--color-rule)]">
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
 
-      <!-- Placeholder 1 -->
-      <article class="p-6 border-r border-b border-[var(--color-rule)] flex flex-col min-h-[280px]">
-        <div class="flex items-center justify-between mb-4">
-          <span class="smallcaps text-xs">MDE Framework</span>
+      <!-- Jjodel -->
+      <a href="https://www.jjodel.io/" target="_blank" rel="noopener" class="group relative flex flex-col p-7 rounded-2xl border border-[var(--color-rule)] hover:border-[var(--color-brand-magenta)] hover:-translate-y-1 transition-all bg-white overflow-hidden min-h-[300px]">
+        <span class="absolute top-0 left-0 right-0 h-1 bg-[var(--color-brand-magenta)]"></span>
+        <div class="flex items-center justify-between mt-2 mb-5">
+          <span class="chip" style="background: color-mix(in oklch, var(--color-brand-magenta) 12%, white); color: var(--color-brand-magenta);">MDE Framework</span>
           <span class="text-xs text-[var(--color-ink-mute)]">Active</span>
         </div>
-        <h3 class="font-serif text-2xl mb-2">[Software Name 1]</h3>
-        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Two-sentence description. What the tool does, who uses it, main selling point compared to alternatives.</p>
+        <h3 class="display text-2xl mb-3">Jjodel</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">A cloud-based reflective modeling platform designed to reduce the cognitive complexity of MDE tools. Supports real-time collaboration, live metamodel + model co-evolution, and syntax customization — with zero-setup access from the browser.</p>
         <div class="mt-6 pt-4 border-t border-[var(--color-rule)]">
           <div class="flex items-center justify-between text-xs text-[var(--color-ink-mute)] mb-3">
-            <span class="font-mono">TypeScript</span>
-            <span>★ 000 · 00 contributors</span>
+            <span class="font-mono">TypeScript · Web</span>
+            <span>MODES Lab</span>
           </div>
           <div class="flex items-center gap-4 text-xs">
-            <a href="#" class="text-[var(--color-accent)] hover:underline">GitHub ↗</a>
-            <a href="#" class="text-[var(--color-accent)] hover:underline">Docs ↗</a>
-            <a href="#" class="text-[var(--color-accent)] hover:underline">Paper ↗</a>
+            <span class="text-[var(--color-brand-magenta)] font-medium">jjodel.io ↗</span>
+            <a href="https://doi.org/10.1109/MODELS-C59198.2023.00019" target="_blank" rel="noopener" class="text-[var(--color-brand-magenta)] hover:underline">Paper (MODELS'23) ↗</a>
           </div>
         </div>
-      </article>
+      </a>
 
-      <!-- Placeholder 2 -->
-      <article class="p-6 border-r border-b border-[var(--color-rule)] flex flex-col min-h-[280px]">
-        <div class="flex items-center justify-between mb-4">
-          <span class="smallcaps text-xs">Library</span>
-          <span class="text-xs text-[var(--color-ink-mute)]">Active</span>
+      <!-- JMT -->
+      <a href="https://jmt.sourceforge.net/" target="_blank" rel="noopener" class="group relative flex flex-col p-7 rounded-2xl border border-[var(--color-rule)] hover:border-[var(--color-brand-pink)] hover:-translate-y-1 transition-all bg-white overflow-hidden min-h-[300px]">
+        <span class="absolute top-0 left-0 right-0 h-1 bg-[var(--color-brand-pink)]"></span>
+        <div class="flex items-center justify-between mt-2 mb-5">
+          <span class="chip" style="background: color-mix(in oklch, var(--color-brand-pink) 12%, white); color: var(--color-brand-pink);">Performance Suite</span>
+          <span class="text-xs text-[var(--color-ink-mute)]">Active · v1.3.0</span>
         </div>
-        <h3 class="font-serif text-2xl mb-2">[Software Name 2]</h3>
-        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Two-sentence description.</p>
+        <h3 class="display text-2xl mb-3">JMT — Java Modelling Tools</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Open-source suite for queueing network modelling, discrete-event simulation, and workload analysis. Six applications covering performance evaluation, mean value analysis, bottleneck identification, and teaching. Originally developed at Politecnico di Milano, now maintained under SWEN supervision.</p>
         <div class="mt-6 pt-4 border-t border-[var(--color-rule)]">
           <div class="flex items-center justify-between text-xs text-[var(--color-ink-mute)] mb-3">
-            <span class="font-mono">Java</span>
-            <span>★ 000 · 00 contributors</span>
+            <span class="font-mono">Java · GPL</span>
+            <span>SPENCER Lab</span>
           </div>
           <div class="flex items-center gap-4 text-xs">
-            <a href="#" class="text-[var(--color-accent)] hover:underline">GitHub ↗</a>
-            <a href="#" class="text-[var(--color-accent)] hover:underline">Maven ↗</a>
+            <span class="text-[var(--color-brand-pink)] font-medium">sourceforge.net ↗</span>
+            <span class="text-[var(--color-ink-mute)]">Bertoli, Casale, Serazzi · 2009</span>
           </div>
         </div>
-      </article>
+      </a>
 
-      <!-- Placeholder 3 -->
-      <article class="p-6 border-r border-b border-[var(--color-rule)] flex flex-col min-h-[280px]">
-        <div class="flex items-center justify-between mb-4">
-          <span class="smallcaps text-xs">CLI Tool</span>
-          <span class="text-xs text-[var(--color-ink-mute)]">Active</span>
+      <!-- Submit your tool CTA -->
+      <a href="#" class="group relative flex flex-col p-7 rounded-2xl border border-dashed border-[var(--color-rule)] hover:border-[var(--color-ink)] transition-all bg-[var(--color-cream)]/30 overflow-hidden min-h-[300px]">
+        <div class="flex items-center justify-between mt-2 mb-5">
+          <span class="chip text-[var(--color-ink-mute)] bg-white border border-[var(--color-rule)]">Add your tool</span>
         </div>
-        <h3 class="font-serif text-2xl mb-2">[Software Name 3]</h3>
-        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Two-sentence description.</p>
-        <div class="mt-6 pt-4 border-t border-[var(--color-rule)]">
-          <div class="flex items-center justify-between text-xs text-[var(--color-ink-mute)] mb-3">
-            <span class="font-mono">Python</span>
-            <span>★ 000 · 00 contributors</span>
-          </div>
-          <div class="flex items-center gap-4 text-xs">
-            <a href="#" class="text-[var(--color-accent)] hover:underline">GitHub ↗</a>
-            <a href="#" class="text-[var(--color-accent)] hover:underline">PyPI ↗</a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Placeholder 4 -->
-      <article class="p-6 border-r border-b border-[var(--color-rule)] flex flex-col min-h-[280px]">
-        <div class="flex items-center justify-between mb-4">
-          <span class="smallcaps text-xs">Web App</span>
-          <span class="text-xs text-[var(--color-ink-mute)]">Active</span>
-        </div>
-        <h3 class="font-serif text-2xl mb-2">[Software Name 4]</h3>
-        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Two-sentence description.</p>
-        <div class="mt-6 pt-4 border-t border-[var(--color-rule)]">
-          <div class="flex items-center justify-between text-xs text-[var(--color-ink-mute)] mb-3">
-            <span class="font-mono">TypeScript</span>
-            <span>★ 000 · 00 contributors</span>
-          </div>
-          <div class="flex items-center gap-4 text-xs">
-            <a href="#" class="text-[var(--color-accent)] hover:underline">Live ↗</a>
-            <a href="#" class="text-[var(--color-accent)] hover:underline">GitHub ↗</a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Placeholder 5 -->
-      <article class="p-6 border-r border-b border-[var(--color-rule)] flex flex-col min-h-[280px]">
-        <div class="flex items-center justify-between mb-4">
-          <span class="smallcaps text-xs">Dataset</span>
-          <span class="text-xs text-[var(--color-ink-mute)]">Active</span>
-        </div>
-        <h3 class="font-serif text-2xl mb-2">[Software Name 5]</h3>
-        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">Two-sentence description.</p>
-        <div class="mt-6 pt-4 border-t border-[var(--color-rule)]">
-          <div class="flex items-center justify-between text-xs text-[var(--color-ink-mute)] mb-3">
-            <span class="font-mono">JSONL / CSV</span>
-            <span>Zenodo DOI</span>
-          </div>
-          <div class="flex items-center gap-4 text-xs">
-            <a href="#" class="text-[var(--color-accent)] hover:underline">Zenodo ↗</a>
-            <a href="#" class="text-[var(--color-accent)] hover:underline">Paper ↗</a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Placeholder 6 -->
-      <article class="p-6 border-r border-b border-[var(--color-rule)] flex flex-col min-h-[280px] bg-[var(--color-cream)]">
-        <div class="flex items-center justify-between mb-4">
-          <span class="smallcaps text-xs text-[var(--color-ink-mute)]">Add your tool</span>
-        </div>
-        <h3 class="font-serif text-2xl mb-2 text-[var(--color-ink-mute)]">Maintain a tool?</h3>
-        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">If you're a SWEN member and maintain academic software, add it via the Notion database.</p>
+        <h3 class="display text-2xl mb-3 text-[var(--color-ink-soft)]">Maintain a tool?</h3>
+        <p class="text-sm text-[var(--color-ink-soft)] leading-relaxed flex-1">If you're a SWEN member and maintain academic software — a library, a framework, a dataset, a benchmark — add it via the Notion database. It will appear here after review by the editorial committee.</p>
         <div class="mt-6 pt-4 border-t border-[var(--color-rule)] text-xs">
-          <a href="#" class="text-[var(--color-accent)] hover:underline">Submit tool →</a>
+          <span class="text-[var(--color-ink-mute)] group-hover:text-[var(--color-ink)] font-medium">Submit tool →</span>
         </div>
-      </article>
+      </a>
 
     </div>
-    <p class="mt-8 text-xs text-[var(--color-ink-mute)] italic">Content to be populated from the SWEN team. GitHub stars and last-updated can be fetched live via the GitHub API at build time.</p>
+    <p class="mt-10 text-xs text-[var(--color-ink-mute)] italic">More tools will be added as SWEN members contribute them. GitHub stars, contributor counts, and last-commit dates can be fetched live via the GitHub API at build time (v1 Astro site).</p>
   </section>
 
   <!-- Why software matters -->
