@@ -46,8 +46,8 @@ jobs:
 
       - name: Build Astro site
         env:
-          SITE_URL: https://swen-univaq.github.io
-          SITE_BASE: /website
+          SITE_URL: https://swen.disim.univaq.it
+          SITE_BASE: /
         run: pnpm exec astro build
 
       - name: Upload Pages artifact
