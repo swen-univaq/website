@@ -136,6 +136,20 @@ export function fmtDate(isoDate: string | null): string {
   return `${d?.replace(/^0/, '')} ${months[parseInt(m, 10) - 1] ?? m} ${y}`;
 }
 
+/**
+ * Whether a talk speaker is external to SWEN.
+ * The Notion "External speaker" checkbox is often left unset, which previously
+ * made every speaker count as a SWEN member (e.g. Andres Diaz-Pace). When the
+ * flag is not explicitly true, fall back to the affiliation: anyone affiliated
+ * with SWEN / Università dell'Aquila is internal, everyone else is external.
+ */
+const SWEN_AFFILIATION = /(\bSWEN\b|dell['’]Aquila|degli Studi dell|UnivAQ|L['’]Aquila)/i;
+export function talkIsExternal(t: Talk): boolean {
+  if (t.external) return true;
+  if (!t.affiliation) return false;
+  return !SWEN_AFFILIATION.test(t.affiliation);
+}
+
 /** Base URL helper (handles /website/ subpath on GitHub Pages). */
 export const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 

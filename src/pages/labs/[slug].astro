@@ -29,7 +29,7 @@ const labSoftware = software.filter((s) => s.relatedLabIds.includes(lab.id));
 <Base title={`${lab.name} — SWEN`} description={lab.description.slice(0, 160)}>
 
   <section class="max-w-6xl mx-auto px-6 pt-16 pb-12">
-    <a href={`${BASE}/`} class="text-xs text-ink-mute hover:text-ink">← Back to home</a>
+    <a href={`${BASE}/research`} class="text-xs text-ink-mute hover:text-ink">← Back to Research</a>
     <div class="flex items-center gap-3 mt-8 mb-4">
       <span class="h-1 w-8 rounded-full" style={`background: ${a.bar};`}></span>
       <p class="smallcaps">{lab.name} · Research Lab at SWEN</p>
@@ -71,9 +71,9 @@ const labSoftware = software.filter((s) => s.relatedLabIds.includes(lab.id));
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
           {team.map((p) => (
             <a href={`${BASE}/people/${p!.slug}`} class="block">
-              <div class="avatar aspect-square w-full mb-2 rounded-full text-sm">
+              <div class="avatar aspect-square w-full mb-2 rounded-2xl text-sm">
                 {p!.photo
-                  ? <img src={p!.photo} alt={p!.name} class="w-full h-full object-cover rounded-full" />
+                  ? <img src={p!.photo} alt={p!.name} class="w-full h-full object-cover rounded-2xl" />
                   : <span>{initials(p!.name)}</span>}
               </div>
               <p class="text-sm">{p!.name}</p>

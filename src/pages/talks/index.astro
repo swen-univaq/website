@@ -1,9 +1,9 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { talks, labs, labAccent, fmtDate, BASE } from '../../lib/resolve';
+import { talks, labs, labAccent, fmtDate, BASE, talkIsExternal } from '../../lib/resolve';
 
-const externalCount = talks.filter((t) => t.external).length;
-const internalCount = talks.filter((t) => !t.external).length;
+const externalCount = talks.filter((t) => talkIsExternal(t)).length;
+const internalCount = talks.filter((t) => !talkIsExternal(t)).length;
 ---
 <Base title="SWEN Talks" description="The SWEN seminar series — monthly research talks by SWEN members and invited speakers.">
   <section class="max-w-5xl mx-auto px-6 pt-16 pb-8">
@@ -38,6 +38,7 @@ const internalCount = talks.filter((t) => !t.external).length;
       {talks.map((t) => {
         const relatedLab = t.relatedLabIds.length > 0 ? labs.find((l) => l.id === t.relatedLabIds[0]) : null;
         const a = relatedLab ? labAccent(relatedLab.name) : { bar: '#44546b', chipBg: '#f5f3ef', chipFg: '#44546b' };
+        const isExternal = talkIsExternal(t);
         return (
           <li class="py-7 border-b border-rule grid md:grid-cols-[140px_1fr_140px] gap-6">
             <div>
@@ -50,12 +51,23 @@ const internalCount = talks.filter((t) => !t.external).length;
               <p class="text-sm text-ink-mute mb-3">
                 <strong class="text-ink">{t.speaker}</strong>{t.affiliation ? ` · ${t.affiliation}` : ''}
               </p>
-              {t.abstract && <p class="text-sm text-ink-soft leading-relaxed">{t.abstract.length > 260 ? `${t.abstract.slice(0, 260)}…` : t.abstract}</p>}
+              {t.abstract && (
+                t.abstract.length > 260 ? (
+                  <details class="group/abstract text-sm text-ink-soft leading-relaxed">
+                    <summary class="list-none cursor-pointer">
+                      <span class="group-open/abstract:hidden">{`${t.abstract.slice(0, 260)}… `}<span class="text-brand-magenta font-medium whitespace-nowrap">Read more</span></span>
+                      <span class="hidden group-open/abstract:inline">{t.abstract}{' '}<span class="text-brand-magenta font-medium whitespace-nowrap">Show less</span></span>
+                    </summary>
+                  </details>
+                ) : (
+                  <p class="text-sm text-ink-soft leading-relaxed">{t.abstract}</p>
+                )
+              )}
             </div>
             <div class="text-xs text-ink-mute md:text-right">
               {t.location && <p>{t.location}</p>}
-              <p class="mt-3 chip" style={t.external ? `background: ${a.chipBg}; color: ${a.chipFg};` : 'background: #f5f3ef; color: #44546b;'}>
-                {t.external ? 'External' : 'Internal'}
+              <p class="mt-3 chip" style={isExternal ? `background: ${a.chipBg}; color: ${a.chipFg};` : 'background: #f5f3ef; color: #44546b;'}>
+                {isExternal ? 'External' : 'Internal'}
               </p>
             </div>
           </li>
@@ -70,8 +82,14 @@ const internalCount = talks.filter((t) => !t.external).length;
       <h2 class="display text-3xl mb-4">Interested in presenting at SWEN Talks?</h2>
       <p class="text-ink-soft leading-relaxed">
         We welcome proposals from researchers and practitioners working on software engineering, model-driven development,
-        performance, software architecture, AI for SE, and adjacent areas. Contact the organising committee via the SWEN coordinator.
+        performance, software architecture, AI for SE, and adjacent areas.
       </p>
+      <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
+        <a href="mailto:alfonso.pierantonio@univaq.it?subject=SWEN%20Talk%20proposal" class="inline-flex items-center gap-2 font-medium text-brand-magenta hover:underline">
+          Email the coordinator ↗
+        </a>
+        <a href={`${BASE}/contact`} class="text-ink-mute hover:text-ink">More ways to get in touch →</a>
+      </div>
     </div>
   </section>
 </Base>
