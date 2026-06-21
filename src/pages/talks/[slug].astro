@@ -1,0 +1,91 @@
+---
+import Base from '../../layouts/Base.astro';
+import { talks, labs, people, labAccent, fmtDate, BASE, talkIsExternal } from '../../lib/resolve';
+
+export async function getStaticPaths() {
+  const { talks: ts } = await import('../../lib/resolve');
+  return ts.map((talk: any) => ({ params: { slug: talk.slug }, props: { talk } }));
+}
+
+const { talk } = Astro.props as { talk: typeof talks[number] };
+
+const relatedLab = talk.relatedLabIds.length > 0 ? labs.find((l) => l.id === talk.relatedLabIds[0]) : null;
+const a = relatedLab ? labAccent(relatedLab.name) : { bar: '#44546b', chipBg: '#f5f3ef', chipFg: '#44546b' };
+const isExternal = talkIsExternal(talk);
+
+// Speaker may be an internal member — link to their page if we can match by name.
+const speakerPerson = people.find((p) => p.name.toLowerCase() === talk.speaker.toLowerCase());
+
+const resources = [
+  talk.slidesUrl ? { label: 'Slides', url: talk.slidesUrl } : null,
+  talk.recordingUrl ? { label: 'Recording', url: talk.recordingUrl } : null,
+  talk.postUrl ? { label: 'Announcement', url: talk.postUrl } : null,
+].filter(Boolean) as { label: string; url: string }[];
+---
+<Base title={`${talk.title} — SWEN Talks`} description={talk.abstract ? talk.abstract.slice(0, 160) : `SWEN Talk by ${talk.speaker}`}>
+  <article class="max-w-3xl mx-auto px-6 pt-16 pb-20">
+    <a href={`${BASE}/talks`} class="text-xs text-ink-mute hover:text-ink">← All talks</a>
+
+    <div class="flex items-center gap-3 mt-8 mb-4">
+      <span class="h-1 w-8 rounded-full" style={`background: ${a.bar};`}></span>
+      <p class="smallcaps">SWEN Talk{relatedLab ? ` · ${relatedLab.name} topic` : ''}</p>
+    </div>
+
+    <h1 class="display text-4xl md:text-5xl leading-tight mb-6">{talk.title}</h1>
+
+    <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-8">
+      <p class="font-serif text-xl">
+        {speakerPerson
+          ? <a href={`${BASE}/people/${speakerPerson.slug}`} class="hover:text-brand-magenta">{talk.speaker}</a>
+          : talk.speaker}
+      </p>
+      <span class="chip" style={isExternal ? `background: ${a.chipBg}; color: ${a.chipFg};` : 'background: #f5f3ef; color: #44546b;'}>
+        {isExternal ? 'External' : 'SWEN member'}
+      </span>
+    </div>
+    {talk.affiliation && <p class="text-ink-soft -mt-6 mb-8">{talk.affiliation}</p>}
+
+    <div class="grid sm:grid-cols-3 gap-6 py-6 border-y border-rule mb-10 text-sm">
+      <div>
+        <p class="smallcaps mb-2">Date</p>
+        <p>{talk.date ? fmtDate(talk.date) : '—'}</p>
+        {(talk.timeStart || talk.timeEnd) && (
+          <p class="text-ink-mute font-mono text-xs mt-1">{talk.timeStart}{talk.timeEnd ? `–${talk.timeEnd}` : ''}</p>
+        )}
+      </div>
+      <div>
+        <p class="smallcaps mb-2">Location</p>
+        <p>{talk.location || '—'}</p>
+      </div>
+      <div>
+        <p class="smallcaps mb-2">Topic lab</p>
+        {relatedLab
+          ? <a href={`${BASE}/labs/${relatedLab.slug}`} class="hover:text-brand-magenta">{relatedLab.name}</a>
+          : <span class="text-ink-mute">—</span>}
+      </div>
+    </div>
+
+    {talk.abstract && (
+      <section class="mb-12">
+        <h2 class="smallcaps mb-4">Abstract</h2>
+        <div class="prose prose-lg max-w-none">
+          {talk.abstract.split('\n\n').map((para) => <p class="text-ink-soft leading-relaxed mb-4">{para}</p>)}
+        </div>
+      </section>
+    )}
+
+    {resources.length > 0 && (
+      <section class="border-t border-rule pt-8">
+        <h2 class="smallcaps mb-4">Materials</h2>
+        <div class="flex flex-wrap gap-4 text-sm">
+          {resources.map((r) => (
+            <a href={r.url} target="_blank" rel="noopener"
+               class="inline-flex items-center gap-2 font-medium hover:underline" style={`color: ${a.chipFg};`}>
+              {r.label} ↗
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </article>
+</Base>

@@ -47,22 +47,20 @@ const internalCount = talks.filter((t) => !talkIsExternal(t)).length;
             </div>
             <div>
               {relatedLab && <p class="smallcaps mb-2" style={`color: ${a.chipFg};`}>{relatedLab.name} topic</p>}
-              <h2 class="font-serif text-xl mb-2 leading-snug">{t.title}</h2>
+              <h2 class="font-serif text-xl mb-2 leading-snug">
+                <a href={`${BASE}/talks/${t.slug}`} class="hover:text-brand-magenta">{t.title}</a>
+              </h2>
               <p class="text-sm text-ink-mute mb-3">
                 <strong class="text-ink">{t.speaker}</strong>{t.affiliation ? ` · ${t.affiliation}` : ''}
               </p>
               {t.abstract && (
-                t.abstract.length > 260 ? (
-                  <details class="group/abstract text-sm text-ink-soft leading-relaxed">
-                    <summary class="list-none cursor-pointer">
-                      <span class="group-open/abstract:hidden">{`${t.abstract.slice(0, 260)}… `}<span class="text-brand-magenta font-medium whitespace-nowrap">Read more</span></span>
-                      <span class="hidden group-open/abstract:inline">{t.abstract}{' '}<span class="text-brand-magenta font-medium whitespace-nowrap">Show less</span></span>
-                    </summary>
-                  </details>
-                ) : (
-                  <p class="text-sm text-ink-soft leading-relaxed">{t.abstract}</p>
-                )
+                <p class="text-sm text-ink-soft leading-relaxed">
+                  {t.abstract.length > 260 ? `${t.abstract.slice(0, 260)}…` : t.abstract}
+                </p>
               )}
+              <a href={`${BASE}/talks/${t.slug}`} class="inline-block mt-3 text-sm font-medium text-brand-magenta hover:underline">
+                Read full talk →
+              </a>
             </div>
             <div class="text-xs text-ink-mute md:text-right">
               {t.location && <p>{t.location}</p>}

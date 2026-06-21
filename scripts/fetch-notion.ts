@@ -192,6 +192,7 @@ async function fetchTalks() {
         relatedPeopleIds: getRelationIds(p.properties, 'Related people'),
         postUrl: getUrl(p.properties, 'Post URL') ?? getRichText(p.properties, 'Post URL') ?? null,
         recordingUrl: getUrl(p.properties, 'Recording URL') ?? null,
+        slidesUrl: getUrl(p.properties, 'Slides URL') ?? getRichText(p.properties, 'Slides URL') ?? null,
         status: getSelectOrText(p.properties, 'Status') ?? 'Past',
         featured: getCheckbox(p.properties, 'Featured'),
       };

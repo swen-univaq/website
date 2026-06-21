@@ -58,7 +58,7 @@ export type Talk = {
   date: string | null; timeStart: string; timeEnd: string;
   location: string; abstract: string;
   relatedLabIds: string[]; relatedPeopleIds: string[];
-  postUrl: string | null; recordingUrl: string | null;
+  postUrl: string | null; recordingUrl: string | null; slidesUrl: string | null;
   status: string; featured: boolean;
 };
 export type News = {

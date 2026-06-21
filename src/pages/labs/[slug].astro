@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import {
   labs, people, projects, software, talks,
-  labAccent, initials, BASE,
+  labAccent, initials, BASE, personPhotoUrl,
 } from '../../lib/resolve';
 
 export async function getStaticPaths() {
@@ -13,8 +13,12 @@ export async function getStaticPaths() {
 const { lab } = Astro.props as { lab: typeof labs[number] };
 const a = labAccent(lab.name);
 
-/* Team: heads (via relation) + people whose interests match lab research lines (best effort) */
+/* Lead: prefer the People relation; fall back to matching the head text by name. */
 const heads = lab.headIds.map((id) => people.find((p) => p.id === id)).filter(Boolean);
+const headPerson = heads.length === 0 && lab.headText
+  ? people.find((p) => p.name.toLowerCase() === lab.headText.toLowerCase())
+  : null;
+const leads = (heads.length > 0 ? heads : headPerson ? [headPerson] : []) as typeof people;
 const relatedLines = new Set(lab.researchLines.map((l) => l.toLowerCase()));
 const team = people
   .filter((p) =>
@@ -41,9 +45,18 @@ const labSoftware = software.filter((s) => s.relatedLabIds.includes(lab.id));
       </div>
       <aside class="text-sm">
         <div class="border-t border-rule pt-4">
-          <p class="smallcaps mb-2">Lead</p>
-          {heads.length > 0
-            ? heads.map((h: any) => <p class="font-serif text-base">{h.name}</p>)
+          <p class="smallcaps mb-3">Lead</p>
+          {leads.length > 0
+            ? leads.map((h) => (
+                <a href={`${BASE}/people/${h.slug}`} class="group flex items-center gap-3 mb-2">
+                  <span class="avatar w-10 h-10 rounded-full overflow-hidden shrink-0 text-xs" style={`box-shadow: 0 0 0 2px ${a.bar};`}>
+                    {(() => { const url = personPhotoUrl(h); return url
+                      ? <img src={url} alt={h.name} class="w-full h-full object-cover rounded-full" />
+                      : <span>{initials(h.name)}</span>; })()}
+                  </span>
+                  <span class="font-serif text-base group-hover:text-brand-magenta">{h.name}</span>
+                </a>
+              ))
             : <p class="font-serif text-base">{lab.headText}</p>}
         </div>
         {lab.website && (

@@ -20,9 +20,9 @@ const visible = software.filter((s) => s.status !== 'Archived');
       {visible.map((s) => {
         const relatedLab = s.relatedLabIds.length > 0 ? labs.find((l) => l.id === s.relatedLabIds[0]) : null;
         const a = relatedLab ? labAccent(relatedLab.name) : { bar: '#44546b', chipBg: '#f5f3ef', chipFg: '#44546b' };
+        const mainUrl = s.repository || s.website || null;
         return (
-          <a href={s.repository || s.website || '#'} target="_blank" rel="noopener"
-             class="group relative flex flex-col p-7 rounded-2xl border border-rule hover:-translate-y-1 transition-all bg-white overflow-hidden min-h-[300px]">
+          <div class="group relative flex flex-col p-7 rounded-2xl border border-rule hover:-translate-y-1 transition-all bg-white overflow-hidden min-h-[300px]">
             <span class="absolute top-0 left-0 right-0 h-1" style={`background: ${a.bar};`}></span>
             <div class="flex items-center justify-between mt-2 mb-5">
               <span class="chip" style={`background: ${a.chipBg}; color: ${a.chipFg};`}>
@@ -30,12 +30,20 @@ const visible = software.filter((s) => s.status !== 'Archived');
               </span>
               <span class="text-xs text-ink-mute">{s.status}</span>
             </div>
-            <h3 class="display text-2xl mb-3">{s.name}</h3>
+            <h3 class="display text-2xl mb-3">
+              {mainUrl
+                ? <a href={mainUrl} target="_blank" rel="noopener" class="hover:text-brand-magenta">{s.name}</a>
+                : s.name}
+            </h3>
             <p class="text-sm text-ink-soft leading-relaxed flex-1">{s.shortDescription}</p>
             <div class="mt-6 pt-4 border-t border-rule">
-              <div class="flex items-center justify-between text-xs text-ink-mute mb-3">
+              <div class="flex items-center justify-between gap-3 text-xs text-ink-mute mb-3">
                 <span class="font-mono">{s.language.join(' · ') || '—'}{s.license ? ` · ${s.license}` : ''}</span>
-                {relatedLab && <span>{relatedLab.name}</span>}
+                {relatedLab && (
+                  <a href={`${BASE}/labs/${relatedLab.slug}`} class="chip shrink-0 hover:underline" style={`background: ${a.chipBg}; color: ${a.chipFg};`}>
+                    {relatedLab.name}
+                  </a>
+                )}
               </div>
               <div class="flex items-center gap-4 text-xs">
                 {s.website && <a href={s.website} target="_blank" rel="noopener" class="font-medium hover:underline" style={`color: ${a.chipFg};`}>{s.website.replace(/^https?:\/\//, '').replace(/\/$/, '')} ↗</a>}
@@ -43,7 +51,7 @@ const visible = software.filter((s) => s.status !== 'Archived');
                 {s.paper && <a href={s.paper} target="_blank" rel="noopener" class="hover:underline" style={`color: ${a.chipFg};`}>Paper ↗</a>}
               </div>
             </div>
-          </a>
+          </div>
         );
       })}
 
