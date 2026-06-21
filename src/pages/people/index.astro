@@ -38,9 +38,9 @@ for (const role of ROLE_ORDER) {
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
               {group.map((p) => (
                 <a href={`${BASE}/people/${p.slug}`} class="group block">
-                  <div class="avatar aspect-[4/5] w-full mb-3 rounded-sm group-hover:brightness-95 transition">
+                  <div class="avatar aspect-[4/5] w-full mb-3 rounded-2xl group-hover:brightness-95 transition">
                     {(() => { const url = personPhotoUrl(p); return url
-                      ? <img src={url} alt={p.name} class="w-full h-full object-cover rounded-sm" />
+                      ? <img src={url} alt={p.name} class="w-full h-full object-cover rounded-2xl" />
                       : <span>{initials(p.name)}</span>; })()}
                   </div>
                   <p class="font-serif text-base leading-tight group-hover:text-brand-magenta">{p.name}</p>
@@ -63,9 +63,9 @@ for (const role of ROLE_ORDER) {
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
               {group.map((p) => (
                 <a href={`${BASE}/people/${p.slug}`} class="group block">
-                  <div class="avatar aspect-square w-full mb-2 rounded-full text-sm group-hover:brightness-95 transition">
+                  <div class="avatar aspect-square w-full mb-2 rounded-2xl text-sm group-hover:brightness-95 transition">
                     {(() => { const url = personPhotoUrl(p); return url
-                      ? <img src={url} alt={p.name} class="w-full h-full object-cover rounded-full" />
+                      ? <img src={url} alt={p.name} class="w-full h-full object-cover rounded-2xl" />
                       : <span>{initials(p.name)}</span>; })()}
                   </div>
                   <p class="text-sm leading-tight group-hover:text-brand-magenta">{p.name}</p>

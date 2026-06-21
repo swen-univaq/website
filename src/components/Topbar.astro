@@ -15,6 +15,13 @@ function isActive(path: string): boolean {
   if (path === '/') return current === '/' || current === '';
   return current.startsWith(path);
 }
+
+// Always resolve to an absolute path. On the custom domain `base` is '',
+// so the old `${base}${''}` produced an empty href that reloaded the
+// current page in Firefox instead of going home.
+function hrefFor(path: string): string {
+  return path === '/' ? `${base}/` : `${base}${path}`;
+}
 ---
 <header class="sticky top-0 z-40 bg-paper/95 backdrop-blur border-b border-rule">
   <div class="gradient-bar h-0.5"></div>
@@ -22,10 +29,12 @@ function isActive(path: string): boolean {
     <a href={`${base}/`} class="flex items-center" aria-label="SWEN home">
       <img src={`${base}/website-logo.png`} alt="SWEN Research Group" class="h-10 w-auto" />
     </a>
-    <nav class="flex items-center gap-9 text-sm">
+
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex items-center gap-9 text-sm">
       {links.map(({ href, label }) => (
         <a
-          href={`${base}${href === '/' ? '' : href}`}
+          href={hrefFor(href)}
           class:list={[
             'pb-1 border-b-2 border-transparent font-medium transition-colors',
             isActive(href)
@@ -37,5 +46,45 @@ function isActive(path: string): boolean {
         </a>
       ))}
     </nav>
+
+    <!-- Mobile hamburger -->
+    <button
+      id="nav-toggle"
+      type="button"
+      class="md:hidden inline-flex items-center justify-center w-10 h-10 -mr-2 text-ink"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
   </div>
+
+  <!-- Mobile nav panel -->
+  <nav id="mobile-nav" class="md:hidden hidden border-t border-rule bg-paper">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex flex-col">
+      {links.map(({ href, label }) => (
+        <a
+          href={hrefFor(href)}
+          class:list={[
+            'py-3 border-b border-rule/60 last:border-0 font-medium transition-colors',
+            isActive(href) ? 'text-brand-magenta' : 'hover:text-brand-magenta',
+          ]}
+        >
+          {label}
+        </a>
+      ))}
+    </div>
+  </nav>
 </header>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const panel = document.getElementById('mobile-nav');
+  toggle?.addEventListener('click', () => {
+    const open = panel?.classList.toggle('hidden') === false;
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+</script>
