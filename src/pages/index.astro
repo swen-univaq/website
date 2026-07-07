@@ -13,8 +13,11 @@ import labsData from '../data/generated/labs.json';
 import projectsData from '../data/generated/projects.json';
 // @ts-expect-error — generated at build time
 import talksData from '../data/generated/talks.json';
+// @ts-expect-error — generated at build time
+import newsData from '../data/generated/news.json';
 
 type Person   = { id: string; slug: string; name: string; role: string | null; order: number; };
+type News     = { id: string; slug: string; title: string; date: string | null; excerpt: string; category: string | null; featured: boolean; status: string; };
 type Lab      = { id: string; slug: string; name: string; acronym: string; description: string; headIds: string[]; headText: string; website: string | null; order: number; };
 type Project  = { id: string; slug: string; name: string; acronym: string; funding: string | null; periodStart: string | null; periodEnd: string | null; description: string; status: string; };
 type Talk     = { id: string; slug: string; title: string; speaker: string; affiliation: string; external: boolean; date: string | null; abstract: string; };
@@ -23,6 +26,7 @@ const people   = peopleData   as Person[];
 const labs     = labsData     as Lab[];
 const projects = projectsData as Project[];
 const talks    = talksData    as Talk[];
+const news     = newsData     as News[];
 
 /* ----- Stats for the key-facts strip ----- */
 const phdCount    = people.filter((p) => p.role === 'PhD').length;
@@ -32,6 +36,16 @@ const activeGrants = projects.filter((p) => p.status === 'Active').length;
 
 /* ----- Featured recent talks (top 3 most recent) ----- */
 const recentTalks = talks.slice(0, 3);
+
+/* ----- Home news: featured first, otherwise the most recent (max 3) ----- */
+// news.json is already Published-only and sorted by date desc.
+const featuredNews = news.filter((n) => n.featured);
+const homeNews = (featuredNews.length > 0 ? featuredNews : news).slice(0, 3);
+
+function fmtNewsDate(iso: string | null): string {
+  if (!iso) return '';
+  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
 
 /* ----- Color + base helpers ----- */
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -116,6 +130,29 @@ const labsAlphabetical = [...labs].sort((a, b) => a.name.localeCompare(b.name));
       </div>
     </div>
   </section>
+
+  <!-- News -->
+  {homeNews.length > 0 && (
+    <section class="max-w-6xl mx-auto px-6 pt-24 pb-4">
+      <div class="flex items-end justify-between mb-10 flex-wrap gap-4">
+        <p class="smallcaps">News</p>
+        <a href={`${base}/news`} class="text-sm font-medium hover:text-brand-magenta">All news →</a>
+      </div>
+      <div class={`grid gap-5 ${homeNews.length === 1 ? '' : homeNews.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'}`}>
+        {homeNews.map((n) => (
+          <a href={`${base}/news/${n.slug}`} class="group flex flex-col p-7 rounded-2xl bg-cream hover:-translate-y-1 transition-all">
+            <div class="flex items-center gap-3 mb-4 text-xs">
+              {n.category && <span class="chip bg-white text-ink-soft">{n.category}</span>}
+              <span class="text-ink-mute">{fmtNewsDate(n.date)}</span>
+            </div>
+            <h3 class="display text-2xl mb-3 leading-snug group-hover:text-brand-magenta transition-colors">{n.title}</h3>
+            <p class="text-sm text-ink-soft leading-relaxed flex-1 line-clamp-3">{n.excerpt}</p>
+            <p class="text-xs font-medium mt-5 opacity-0 group-hover:opacity-100 transition-opacity">Read more →</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
 
   <!-- Labs -->
   <section class="max-w-6xl mx-auto px-6 py-28">
