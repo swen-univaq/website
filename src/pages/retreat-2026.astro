@@ -133,20 +133,36 @@ const days: { day: string; date: string; items: Item[] }[] = [
 
   <!-- Venue -->
   <section class="max-w-6xl mx-auto px-6 pb-20">
-    <div class="p-8 md:p-12 rounded-2xl bg-cream">
-      <p class="smallcaps mb-4">The venue</p>
-      <h2 class="display text-3xl mb-4">Borgotufi, an albergo diffuso at 800 m.</h2>
-      <p class="text-ink-soft max-w-3xl leading-relaxed">
-        Borgotufi is a restored stone village in Castel del Giudice, on the border between Molise and Abruzzo.
-        Rooms are houses scattered across the village — the ideal setting for three days of focused work,
-        long conversations, and evenings that last a little longer than planned.
-      </p>
-      <a
-        href="https://www.borgotufi.it"
-        target="_blank"
-        rel="noopener"
-        class="inline-block mt-6 text-sm font-semibold underline underline-offset-4 decoration-ink-mute hover:text-ink"
-      >borgotufi.it →</a>
+    <div class="p-8 md:p-12 rounded-2xl bg-cream grid md:grid-cols-[1fr,320px] gap-8 md:gap-12 items-center">
+      <div>
+        <p class="smallcaps mb-4">The venue</p>
+        <h2 class="display text-3xl mb-4">Borgotufi, an albergo diffuso at 800 m.</h2>
+        <p class="text-ink-soft max-w-3xl leading-relaxed">
+          Borgotufi is a restored stone village in Castel del Giudice, on the border between Molise and Abruzzo.
+          Rooms are houses scattered across the village — the ideal setting for three days of focused work,
+          long conversations, and evenings that last a little longer than planned.
+        </p>
+        <a
+          href="https://www.borgotufi.it"
+          target="_blank"
+          rel="noopener"
+          class="inline-block mt-6 text-sm font-semibold underline underline-offset-4 decoration-ink-mute hover:text-ink"
+        >borgotufi.it →</a>
+      </div>
+      <figure>
+        <img
+          src={`${BASE}/retreat-2026-borgotufi.jpg`}
+          alt="Stone houses of the Borgotufi albergo diffuso in Castel del Giudice"
+          class="rounded-xl w-full shadow-sm"
+          width="640"
+          height="412"
+          loading="lazy"
+        />
+        <figcaption class="text-[11px] text-ink-mute mt-2">
+          Photo: <a href="https://www.flickr.com/photos/81227945@N00/12139264746" target="_blank" rel="noopener" class="underline">Fiore S. Barbato</a>,
+          <a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener" class="underline">CC BY-SA 2.0</a>
+        </figcaption>
+      </figure>
     </div>
   </section>
 </Base>
