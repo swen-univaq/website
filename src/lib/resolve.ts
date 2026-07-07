@@ -26,6 +26,7 @@ export type Person = {
   interests: string[]; website: string | null; scholar: string | null;
   dblpPid: string; orcid: string; github: string; linkedin: string | null;
   status: string; order: number; photo: string | null; notes: string;
+  labIds: string[];
 };
 export type Lab = {
   id: string; slug: string; name: string; acronym: string;

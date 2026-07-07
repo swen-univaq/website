@@ -73,6 +73,7 @@ async function fetchPeople() {
         order: getNumber(p.properties, 'Order') ?? 999,
         photo: getFileOrUrl(p.properties, 'Photo'),
         notes: getRichText(p.properties, 'Notes'),
+        labIds: getRelationIds(p.properties, 'Lab'),
       };
     })
     .filter((p) => !isPlaceholder(p.name));
