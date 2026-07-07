@@ -36,10 +36,10 @@ const roleLabel: Record<string, string> = {
   'PhD': 'PhD Student',
 };
 
-/* Best-effort: find the person's lab via Notion relation (Lab.headIds) or text match in Lab.headText */
-const personLab = labs.find((l) =>
-  l.headIds.includes(person.id) || l.headText.toLowerCase().includes(person.name.toLowerCase()),
-);
+/* Person's lab: explicit Lab relation on the person, else lab-head fallback */
+const personLab =
+  labs.find((l) => (person as any).labIds?.includes(l.id)) ??
+  labs.find((l) => l.headIds.includes(person.id) || l.headText.toLowerCase().includes(person.name.toLowerCase()));
 const labA = personLab ? labAccent(personLab.name) : null;
 
 /* Projects this person is PI or team on */
