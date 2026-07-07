@@ -65,6 +65,8 @@ export type News = {
   id: string; slug: string; title: string;
   date: string | null; excerpt: string;
   category: string | null; featured: boolean; status: string;
+  /** Page body rendered from Notion blocks at fetch time ('' if empty). */
+  bodyHtml: string;
 };
 
 export const people   = peopleData   as Person[];

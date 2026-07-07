@@ -1,0 +1,152 @@
+---
+/**
+ * SWEN Retreat 2026 — public showcase page.
+ * Deliberately public-facing: program overview, venue, new members.
+ * Practical/internal details (costs, car pooling, deadlines) stay in email.
+ */
+import Base from '../layouts/Base.astro';
+import { people, BASE } from '../lib/resolve';
+
+// New members introduced at the retreat. Linked to /people when present in the DB.
+const newMembers = [
+  { name: 'Luciana Brasil Rebelo dos Santos', role: 'Postdoc' },
+  { name: 'Muhammad Umar Zeshan', role: 'PhD student' },
+  { name: 'Zakaria Hachm', role: 'PhD student' },
+  { name: 'Hafiz Anas Bilal', role: 'PhD student' },
+  { name: 'Venkata Subramaniyan Ganesh', role: 'PhD student' },
+  { name: 'Anjali Santhosh', role: 'PhD student' },
+].map((m) => {
+  const p = people.find((p) => p.name.toLowerCase() === m.name.toLowerCase());
+  return { ...m, slug: p?.slug ?? null };
+});
+
+type Item = { time: string; what: string };
+const days: { day: string; date: string; items: Item[] }[] = [
+  {
+    day: 'Monday',
+    date: 'July 13',
+    items: [
+      { time: '12:30', what: 'Arrival and lunch together' },
+      { time: '14:30', what: 'Opening plenary — retreat objectives, communications, and how collaborative research works at SWEN' },
+      { time: '', what: 'Self-introductions by the six new PhD students and postdocs' },
+      { time: '17:00', what: 'Team-building — trekking in the hills of Alto Molise' },
+      { time: '20:30', what: 'Welcome reception' },
+    ],
+  },
+  {
+    day: 'Tuesday',
+    date: 'July 14',
+    items: [
+      { time: '9:30', what: 'Breakout sessions — research lines and cross-lab collaborations' },
+      { time: '13:00', what: 'Lunch' },
+      { time: '14:30', what: 'Breakout sessions — planning 2026–27' },
+      { time: '18:00', what: 'Wrap-up by group leaders' },
+      { time: '20:00', what: 'Gala dinner' },
+    ],
+  },
+  {
+    day: 'Wednesday',
+    date: 'July 15',
+    items: [
+      { time: '9:30', what: 'Closing plenary — round table with Prof. Giulio Antonini, Deputy Rector for Research' },
+      { time: '11:30', what: 'Wrap-up and closing remarks' },
+    ],
+  },
+];
+---
+<Base
+  title="SWEN Retreat 2026 — Borgotufi"
+  description="The annual SWEN retreat: July 13–15, 2026 in Borgotufi (Castel del Giudice, Alto Molise). Three days of research, planning, and community."
+>
+  <!-- Hero -->
+  <section class="max-w-6xl mx-auto px-6 pt-16 pb-12">
+    <p class="smallcaps mb-6">SWEN Retreat 2026</p>
+    <h1 class="display text-5xl md:text-6xl mb-8 max-w-3xl">Three days of research, planning, and community.</h1>
+    <p class="text-lg text-ink-soft max-w-3xl leading-relaxed">
+      Once a year the whole group leaves the department and gathers in one place to look at the bigger picture:
+      where our research is going, which collaborations to start next, and who has joined us along the way.
+      In 2026 we meet in <strong class="font-semibold text-ink">Borgotufi</strong>, a scattered-hotel village in Alto Molise.
+    </p>
+    <div class="mt-10 flex flex-wrap gap-x-10 gap-y-4">
+      <div>
+        <p class="smallcaps mb-1">When</p>
+        <p class="font-serif text-xl">July 13–15, 2026</p>
+      </div>
+      <div>
+        <p class="smallcaps mb-1">Where</p>
+        <p class="font-serif text-xl">Borgotufi, Castel del Giudice (Alto Molise)</p>
+      </div>
+      <div>
+        <p class="smallcaps mb-1">Who</p>
+        <p class="font-serif text-xl">The whole group — faculty, postdocs, PhD students</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="gradient-bar h-1 max-w-6xl mx-auto"></div>
+
+  <!-- Program -->
+  <section class="max-w-6xl mx-auto px-6 py-16">
+    <p class="smallcaps mb-6">Program at a glance</p>
+    <div class="grid md:grid-cols-3 gap-6">
+      {days.map((d) => (
+        <div class="p-8 rounded-2xl border border-rule bg-white">
+          <h2 class="display text-2xl">{d.day}</h2>
+          <p class="text-sm text-ink-mute mb-6">{d.date}</p>
+          <ul class="space-y-4">
+            {d.items.map((it) => (
+              <li class="flex gap-4 text-sm leading-relaxed">
+                <span class="font-mono text-xs text-ink-mute pt-0.5 w-10 shrink-0">{it.time}</span>
+                <span class="text-ink-soft">{it.what}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- New members -->
+  <section class="max-w-6xl mx-auto px-6 pb-16">
+    <p class="smallcaps mb-6">New members</p>
+    <h2 class="display text-3xl mb-6 max-w-2xl">Six researchers join SWEN this year.</h2>
+    <p class="text-ink-soft max-w-3xl leading-relaxed mb-10">
+      The retreat opens with self-introductions by the group's newest PhD students and postdocs —
+      who they are, where they come from, and what they plan to work on.
+    </p>
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {newMembers.map((m) => (
+        m.slug ? (
+          <a href={`${BASE}/people/${m.slug}`} class="p-5 rounded-2xl border border-rule bg-white hover:-translate-y-1 transition-all">
+            <p class="font-serif text-lg">{m.name}</p>
+            <p class="text-xs text-ink-mute mt-1">{m.role}</p>
+          </a>
+        ) : (
+          <div class="p-5 rounded-2xl border border-rule bg-white">
+            <p class="font-serif text-lg">{m.name}</p>
+            <p class="text-xs text-ink-mute mt-1">{m.role}</p>
+          </div>
+        )
+      ))}
+    </div>
+  </section>
+
+  <!-- Venue -->
+  <section class="max-w-6xl mx-auto px-6 pb-20">
+    <div class="p-8 md:p-12 rounded-2xl bg-cream">
+      <p class="smallcaps mb-4">The venue</p>
+      <h2 class="display text-3xl mb-4">Borgotufi, an albergo diffuso at 800 m.</h2>
+      <p class="text-ink-soft max-w-3xl leading-relaxed">
+        Borgotufi is a restored stone village in Castel del Giudice, on the border between Molise and Abruzzo.
+        Rooms are houses scattered across the village — the ideal setting for three days of focused work,
+        long conversations, and evenings that last a little longer than planned.
+      </p>
+      <a
+        href="https://www.borgotufi.it"
+        target="_blank"
+        rel="noopener"
+        class="inline-block mt-6 text-sm font-semibold underline underline-offset-4 decoration-ink-mute hover:text-ink"
+      >borgotufi.it →</a>
+    </div>
+  </section>
+</Base>

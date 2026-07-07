@@ -30,6 +30,7 @@ import {
   getFileOrUrl,
   slugify,
 } from '../src/lib/notion.js';
+import { renderPageBody } from '../src/lib/notion-blocks.js';
 
 /** Filter leftover CSV placeholder rows (e.g. "website-notion-events" imported by mistake). */
 function isPlaceholder(name: string): boolean {
@@ -200,9 +201,13 @@ async function fetchTalks() {
     .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
 }
 
+/** Where downloaded news images end up (Notion file URLs expire after ~1h). */
+const NEWS_MEDIA_DIR = resolve(process.cwd(), 'public/news-media');
+const NEWS_MEDIA_PREFIX = `${(process.env.SITE_BASE ?? '/').replace(/\/+$/, '')}/news-media`;
+
 async function fetchNews() {
   const pages = await queryAll(NOTION_DB_IDS.news);
-  return pages
+  const rows = pages
     .map((p) => {
       const title = getTitle(p.properties, 'Title');
       return {
@@ -214,11 +219,21 @@ async function fetchNews() {
         category: getSelectOrText(p.properties, 'Category'),
         featured: getCheckbox(p.properties, 'Featured'),
         status: getSelectOrText(p.properties, 'Status') ?? 'Published',
+        bodyHtml: '',
       };
     })
     .filter((r) => !isPlaceholder(r.title))
     .filter((r) => r.status === 'Published')
     .sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
+
+  // Page bodies: sequential to stay well within Notion rate limits (~3 req/s).
+  for (const r of rows) {
+    r.bodyHtml = await renderPageBody(r.id, {
+      dir: NEWS_MEDIA_DIR,
+      urlPrefix: NEWS_MEDIA_PREFIX,
+    });
+  }
+  return rows;
 }
 
 async function fetchEvents() {
