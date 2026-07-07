@@ -57,13 +57,13 @@ const levelLabel: Record<string, string> = {
         {grouped.map(({ level, items }) => (
           <div>
             <h2 class="display text-3xl mb-6">{levelLabel[level] ?? level}</h2>
-            <ul class="border-t border-rule">
+            <ul class="border-t border-rule grid md:grid-cols-2 gap-x-12">
               {items.map((c: any) => {
                 const instructor = instructorName(c);
                 return (
                   <li class="py-5 border-b border-rule">
                     <div class="flex flex-wrap items-baseline justify-between gap-2">
-                      <h3 class="font-serif text-xl">
+                      <h3 class="font-serif text-lg leading-snug">
                         {c.link ? (
                           <a href={c.link} target="_blank" rel="noopener" class="hover:text-brand-magenta hover:underline">{c.title} ↗</a>
                         ) : (
@@ -73,7 +73,7 @@ const levelLabel: Record<string, string> = {
                       {c.academicYear && <span class="text-xs font-mono text-ink-mute">{c.academicYear}</span>}
                     </div>
                     {instructor && <p class="smallcaps text-brand-magenta mt-1">{instructor}</p>}
-                    {c.description && <p class="text-sm text-ink-soft mt-2 max-w-3xl">{c.description}</p>}
+                    {c.description && <p class="text-sm text-ink-soft mt-2">{c.description}</p>}
                   </li>
                 );
               })}
@@ -83,7 +83,7 @@ const levelLabel: Record<string, string> = {
         {other.length > 0 && (
           <div>
             <h2 class="display text-3xl mb-6">Other courses</h2>
-            <ul class="border-t border-rule">
+            <ul class="border-t border-rule grid md:grid-cols-2 gap-x-12">
               {other.map((c: any) => (
                 <li class="py-5 border-b border-rule">
                   <h3 class="font-serif text-xl">{c.title}</h3>
