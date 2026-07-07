@@ -114,9 +114,14 @@ export const ROLE_LABEL: Record<string, string> = {
   'PA': 'Associate Professors',
   'RTD-B': 'Assistant Professors (RTD-B)',
   'RTD-A': 'Assistant Professors (RTD-A)',
-  'PostDoc': 'Postdocs',
+  'PostDoc': 'Postdocs & Research Fellows',
   'PhD': 'PhD Students',
 };
+
+/** Contract type for postdocs/fellows, from a "Contract: X" prefix in Notes. */
+export function contractLabel(notes: string): string | null {
+  return notes.match(/Contract:\s*([^·]+)/i)?.[1].trim() ?? null;
+}
 
 /** Initials for avatar placeholders. */
 export function initials(name: string): string {

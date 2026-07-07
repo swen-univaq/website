@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { people, ROLE_ORDER, ROLE_LABEL, initials, BASE, personPhotoUrl } from '../../lib/resolve';
+import { people, ROLE_ORDER, ROLE_LABEL, initials, BASE, personPhotoUrl, contractLabel } from '../../lib/resolve';
 
 /* group people by role, preserving the canonical order */
 const grouped: Record<string, typeof people> = {};
@@ -50,7 +50,7 @@ for (const role of ROLE_ORDER) {
           ) : isPhD ? (
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3 text-sm">
               {group.map((p) => {
-                const cycle = (p.notes.match(/Cycle\s+([IVX]+)/i)?.[1] ?? '').toUpperCase();
+                const cycle = (p.notes.match(/Cycle\s+([IVXLCDM]+)/i)?.[1] ?? '').toUpperCase();
                 return (
                   <a href={`${BASE}/people/${p.slug}`} class="flex justify-between border-b border-rule pb-2 hover:text-brand-magenta">
                     <span>{p.name}</span>
@@ -61,16 +61,20 @@ for (const role of ROLE_ORDER) {
             </div>
           ) : (
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
-              {group.map((p) => (
-                <a href={`${BASE}/people/${p.slug}`} class="group block">
-                  <div class="avatar aspect-square w-full mb-2 rounded-2xl text-sm group-hover:brightness-95 transition">
-                    {(() => { const url = personPhotoUrl(p); return url
-                      ? <img src={url} alt={p.name} class="w-full h-full object-cover rounded-2xl" />
-                      : <span>{initials(p.name)}</span>; })()}
-                  </div>
-                  <p class="text-sm leading-tight group-hover:text-brand-magenta">{p.name}</p>
-                </a>
-              ))}
+              {group.map((p) => {
+                const contract = contractLabel(p.notes);
+                return (
+                  <a href={`${BASE}/people/${p.slug}`} class="group block">
+                    <div class="avatar aspect-square w-full mb-2 rounded-2xl text-sm group-hover:brightness-95 transition">
+                      {(() => { const url = personPhotoUrl(p); return url
+                        ? <img src={url} alt={p.name} class="w-full h-full object-cover rounded-2xl" />
+                        : <span>{initials(p.name)}</span>; })()}
+                    </div>
+                    <p class="text-sm leading-tight group-hover:text-brand-magenta">{p.name}</p>
+                    {contract && <p class="text-[11px] text-ink-mute mt-0.5">{contract}</p>}
+                  </a>
+                );
+              })}
             </div>
           )}
         </div>
