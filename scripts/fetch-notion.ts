@@ -265,7 +265,11 @@ async function fetchTeaching() {
       type: getSelectOrText(p.properties, 'Type'),
       level: getSelectOrText(p.properties, 'Level'),
       instructorIds: getRelationIds(p.properties, 'Instructor'),
-      instructorText: getRichText(p.properties, 'Instructor'),
+      instructorText:
+        getRichText(p.properties, 'Instructors') ||
+        getSelectOrText(p.properties, 'Instructor') ||
+        getRichText(p.properties, 'Instructor') ||
+        '',
       academicYear: getRichText(p.properties, 'Academic year'),
       description: getRichText(p.properties, 'Description'),
       deadline: getDateStart(p.properties, 'Deadline') ?? null,

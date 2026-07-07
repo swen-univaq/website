@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import {
-  people, projects, talks, labs, software,
+  people, projects, talks, labs, software, teaching,
   labAccent, initials, BASE, fmtMonth, personPhotoUrl,
 } from '../../lib/resolve';
 
@@ -54,6 +54,11 @@ const personTalks = talks.filter(
 
 /* Software this person maintains */
 const personSoftware = software.filter((s) => s.maintainerIds.includes(person.id));
+
+/* Courses this person teaches (matched by name in the Instructors field) */
+const personCourses = (teaching as any[])
+  .filter((t) => t.type === 'Course' && (t.instructorText ?? '').toLowerCase().includes(person.name.toLowerCase()))
+  .sort((a, b) => (a.level ?? '').localeCompare(b.level ?? '') || a.title.localeCompare(b.title));
 
 /* Publications where this person is an author (matched by DBLP entry's authorsSwen) */
 type Publication = {
@@ -146,6 +151,27 @@ const topPubs = personPubs.slice(0, 10);
               </p>
               <p class="font-serif text-base mt-1">{p.name}</p>
             </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {personCourses.length > 0 && (
+    <section class="max-w-5xl mx-auto px-6 py-10 border-t border-rule">
+      <h2 class="display text-3xl mb-5">Teaching</h2>
+      <ul>
+        {personCourses.map((c) => (
+          <li class="py-4 border-b border-rule">
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              {c.link ? (
+                <a href={c.link} target="_blank" rel="noopener" class="font-serif text-base hover:text-brand-magenta">{c.title} ↗</a>
+              ) : (
+                <span class="font-serif text-base">{c.title}</span>
+              )}
+              <span class="text-xs font-mono text-ink-mute">{c.level}{c.academicYear ? ` · ${c.academicYear}` : ''}</span>
+            </div>
+            {c.description && <p class="text-xs text-ink-mute mt-1">{c.description}</p>}
           </li>
         ))}
       </ul>
