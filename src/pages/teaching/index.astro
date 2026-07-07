@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { teaching, personById } from '../../lib/resolve';
+import { teaching, people, personById } from '../../lib/resolve';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -15,14 +15,22 @@ const grouped = levels
   .filter((g) => g.items.length > 0);
 const other = courses.filter((c: any) => !levels.includes(c.level));
 
-function instructorName(c: any): string | null {
+/* Instructors as [{name, slug|null}]: linked to /people when they are SWEN members. */
+const slugByName = new Map(people.map((p) => [p.name.toLowerCase(), p.slug]));
+
+function instructorList(c: any): { name: string; slug: string | null }[] {
   if (c.instructorIds?.length > 0) {
-    const names = c.instructorIds
-      .map((id: string) => personById(id)?.name)
-      .filter(Boolean);
-    if (names.length > 0) return names.join(', ');
+    const found = c.instructorIds
+      .map((id: string) => personById(id))
+      .filter(Boolean)
+      .map((p: any) => ({ name: p.name, slug: p.slug }));
+    if (found.length > 0) return found;
   }
-  return c.instructorText || null;
+  return (c.instructorText || '')
+    .split(',')
+    .map((s: string) => s.trim())
+    .filter(Boolean)
+    .map((name: string) => ({ name, slug: slugByName.get(name.toLowerCase()) ?? null }));
 }
 
 const levelLabel: Record<string, string> = {
@@ -59,7 +67,7 @@ const levelLabel: Record<string, string> = {
             <h2 class="display text-3xl mb-6">{levelLabel[level] ?? level}</h2>
             <ul class="border-t border-rule grid md:grid-cols-2 gap-x-12">
               {items.map((c: any) => {
-                const instructor = instructorName(c);
+                const instructors = instructorList(c);
                 return (
                   <li class="py-5 border-b border-rule">
                     <div class="flex flex-wrap items-baseline justify-between gap-2">
@@ -72,7 +80,20 @@ const levelLabel: Record<string, string> = {
                       </h3>
                       {c.academicYear && <span class="text-xs font-mono text-ink-mute">{c.academicYear}</span>}
                     </div>
-                    {instructor && <p class="smallcaps text-brand-magenta mt-1">{instructor}</p>}
+                    {instructors.length > 0 && (
+                      <p class="smallcaps text-brand-magenta mt-1">
+                        {instructors.map((i, idx) => (
+                          <>
+                            {idx > 0 && ', '}
+                            {i.slug ? (
+                              <a href={`${base}/people/${i.slug}`} class="hover:underline underline-offset-2">{i.name}</a>
+                            ) : (
+                              i.name
+                            )}
+                          </>
+                        ))}
+                      </p>
+                    )}
                     {c.description && <p class="text-sm text-ink-soft mt-2">{c.description}</p>}
                   </li>
                 );
