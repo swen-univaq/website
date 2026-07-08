@@ -253,6 +253,16 @@ async function main() {
 
   console.log(`→ Fetching DBLP for ${withPids.length}/${people.length} people with a PID...\n`);
 
+  let prevPubs: Publication[] = [];
+  if (existsSync(CACHE_FILE)) {
+    try {
+      prevPubs = JSON.parse(readFileSync(CACHE_FILE, 'utf8'));
+      console.log(`\u2192 Last-known-good DBLP cache available: ${prevPubs.length} entries\n`);
+    } catch {
+      /* corrupt cache: ignore, fetch everything fresh */
+    }
+  }
+
   const allPubs: Publication[] = [];
   const failedPids: string[] = [];
   for (const person of withPids) {
@@ -278,7 +288,7 @@ async function main() {
 
   if (failedPids.length > 0) {
     console.warn(
-      `\n⚠ ${failedPids.length}/${withPids.length} DBLP fetches failed — these authors are MISSING from publications.json:\n` +
+      `\n⚠ ${failedPids.length}/${withPids.length} DBLP fetches failed:\n` +
         failedPids.map((f) => `    - ${f}`).join('\n'),
     );
   }
