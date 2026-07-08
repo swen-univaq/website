@@ -271,7 +271,8 @@ async function fetchTeaching() {
         getSelectOrText(p.properties, 'Instructor') ||
         getRichText(p.properties, 'Instructor') ||
         '',
-      academicYear: getRichText(p.properties, 'Academic year'),
+      academicYear: getSelectOrText(p.properties, 'Academic year') ?? getRichText(p.properties, 'Academic year'),
+      semester: getSelectOrText(p.properties, 'Semester'),
       description: getRichText(p.properties, 'Description'),
       deadline: getDateStart(p.properties, 'Deadline') ?? null,
       status: getSelectOrText(p.properties, 'Status') ?? 'Open',
