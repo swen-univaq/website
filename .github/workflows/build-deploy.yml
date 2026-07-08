@@ -38,6 +38,16 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Last-known-good DBLP data: if DBLP rate-limits a PID even after retries,
+      # fetch-dblp.ts falls back to that author's entries from the previous run.
+      - name: Restore last-known-good DBLP cache
+        uses: actions/cache@v4
+        with:
+          path: .dblp-cache
+          key: dblp-cache-${{ github.run_id }}
+          restore-keys: |
+            dblp-cache-
+
       - name: Fetch all content (Notion + DBLP + GitHub)
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}

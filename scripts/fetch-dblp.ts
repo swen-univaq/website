@@ -17,6 +17,14 @@ import { XMLParser } from 'fast-xml-parser';
 const OUT_DIR = resolve(process.cwd(), 'src/data/generated');
 mkdirSync(OUT_DIR, { recursive: true });
 
+/* Last-known-good cache (restored between CI runs by actions/cache, see
+ * build-deploy.yml). GitHub runners share egress IPs that DBLP throttles
+ * regardless of our own pacing, so any author whose fetch still fails after
+ * retries inherits their entries from the previous successful run instead of
+ * silently vanishing from the site. */
+const CACHE_DIR = resolve(process.cwd(), '.dblp-cache');
+const CACHE_FILE = resolve(CACHE_DIR, 'publications.json');
+
 /* ----- Peer-reviewed venue whitelist -----
  * DBLP returns abbreviated journal names (e.g. "Softw. Syst. Model." for SoSyM),
  * so match against both the abbreviation and the full-name form.
@@ -98,8 +106,8 @@ type PersonRow = {
 /* DBLP rate-limits aggressively (HTTP 429): without retries, everyone after the
  * first few PIDs is silently skipped and their publications vanish from the site.
  * Retry with exponential backoff, honouring DBLP's Retry-After header when present. */
-const MAX_ATTEMPTS = 4;
-const MAX_WAIT_MS = 60_000;
+const MAX_ATTEMPTS = 5;
+const MAX_WAIT_MS = 120_000;
 
 async function fetchPidXml(pid: string): Promise<string | null> {
   const url = `https://dblp.org/pid/${pid}.xml`;
@@ -119,7 +127,7 @@ async function fetchPidXml(pid: string): Promise<string | null> {
       if (attempt < MAX_ATTEMPTS) {
         const retryAfter = parseInt(res.headers.get('retry-after') ?? '', 10);
         const waitMs = Math.min(
-          Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : 3000 * 2 ** (attempt - 1),
+          Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : 5000 * 2 ** (attempt - 1),
           MAX_WAIT_MS,
         );
         console.warn(`  … DBLP ${pid}: HTTP ${res.status}, retry ${attempt}/${MAX_ATTEMPTS - 1} in ${Math.round(waitMs / 1000)}s`);
@@ -129,7 +137,7 @@ async function fetchPidXml(pid: string): Promise<string | null> {
     } catch (e: any) {
       status = e.message;
       if (attempt < MAX_ATTEMPTS) {
-        const waitMs = Math.min(3000 * 2 ** (attempt - 1), MAX_WAIT_MS);
+        const waitMs = Math.min(5000 * 2 ** (attempt - 1), MAX_WAIT_MS);
         console.warn(`  … DBLP ${pid}: ${e.message}, retry ${attempt}/${MAX_ATTEMPTS - 1} in ${Math.round(waitMs / 1000)}s`);
         await new Promise((r) => setTimeout(r, waitMs));
         continue;
@@ -251,7 +259,14 @@ async function main() {
     const pid = person.dblpPid.trim();
     const xml = await fetchPidXml(pid);
     if (!xml) {
-      failedPids.push(`${person.name} (${pid})`);
+      const salvaged = prevPubs.filter((p) => p.authorsSwen.includes(person.name));
+      if (salvaged.length > 0) {
+        console.warn(`  \u21bb ${person.name}: recovered ${salvaged.length} entries from last-known-good cache`);
+        allPubs.push(...salvaged);
+        failedPids.push(`${person.name} (${pid}) \u2014 recovered ${salvaged.length} from cache`);
+      } else {
+        failedPids.push(`${person.name} (${pid}) \u2014 NOT in cache, missing from site`);
+      }
       continue;
     }
     const pubs = parseDblpXml(xml, person);
@@ -270,6 +285,10 @@ async function main() {
 
   const unique = dedupe(allPubs).sort((a, b) => b.year - a.year || a.title.localeCompare(b.title));
   writeFileSync(resolve(OUT_DIR, 'publications.json'), JSON.stringify(unique, null, 2), 'utf8');
+
+  // refresh the last-known-good cache for the next run
+  mkdirSync(CACHE_DIR, { recursive: true });
+  writeFileSync(CACHE_FILE, JSON.stringify(unique, null, 2), 'utf8');
 
   console.log(
     `\n✓ Wrote publications.json with ${unique.length} unique peer-reviewed entries` +
