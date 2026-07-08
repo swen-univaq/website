@@ -6,14 +6,24 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const courses = teaching.filter((t: any) => t.type === 'Course');
 
+/* Order courses by academic year (newest first), then semester, then title. */
+const semRank: Record<string, number> = { '1st semester': 0, '2nd semester': 1, 'Annual': 2 };
+function courseSort(a: any, b: any): number {
+  return (
+    (b.academicYear || '').localeCompare(a.academicYear || '') ||
+    (semRank[a.semester] ?? 9) - (semRank[b.semester] ?? 9) ||
+    a.title.localeCompare(b.title)
+  );
+}
+
 const levels = ['BSc', 'MSc', 'PhD'];
 const grouped = levels
   .map((level) => ({
     level,
-    items: courses.filter((c: any) => c.level === level),
+    items: courses.filter((c: any) => c.level === level).sort(courseSort),
   }))
   .filter((g) => g.items.length > 0);
-const other = courses.filter((c: any) => !levels.includes(c.level));
+const other = courses.filter((c: any) => !levels.includes(c.level)).sort(courseSort);
 
 /* Instructors as [{name, slug|null}]: linked to /people when they are SWEN members. */
 const slugByName = new Map(people.map((p) => [p.name.toLowerCase(), p.slug]));
@@ -78,7 +88,7 @@ const levelLabel: Record<string, string> = {
                           c.title
                         )}
                       </h3>
-                      {c.academicYear && <span class="text-xs font-mono text-ink-mute">{c.academicYear}</span>}
+                      {c.academicYear && <span class="text-xs font-mono text-ink-mute">{c.academicYear}{c.semester && ` \u00b7 ${c.semester}`}</span>}
                     </div>
                     {instructors.length > 0 && (
                       <p class="smallcaps text-brand-magenta mt-1">
