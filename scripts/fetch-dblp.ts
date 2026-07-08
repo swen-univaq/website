@@ -263,6 +263,12 @@ async function main() {
     }
   }
 
+  /* Fetch cache-less authors first: DBLP goodwill is freshest at the start of
+   * the run, so authors not yet covered by the last-known-good cache (e.g. new
+   * members) converge on their first build instead of waiting for a lucky run. */
+  const covered = new Set(prevPubs.flatMap((p) => p.authorsSwen));
+  withPids.sort((a, b) => Number(covered.has(a.name)) - Number(covered.has(b.name)));
+
   const allPubs: Publication[] = [];
   const failedPids: string[] = [];
   for (const person of withPids) {
