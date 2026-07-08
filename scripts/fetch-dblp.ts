@@ -95,21 +95,49 @@ type PersonRow = {
   dblpPid: string;
 };
 
+/* DBLP rate-limits aggressively (HTTP 429): without retries, everyone after the
+ * first few PIDs is silently skipped and their publications vanish from the site.
+ * Retry with exponential backoff, honouring DBLP's Retry-After header when present. */
+const MAX_ATTEMPTS = 4;
+const MAX_WAIT_MS = 60_000;
+
 async function fetchPidXml(pid: string): Promise<string | null> {
   const url = `https://dblp.org/pid/${pid}.xml`;
-  try {
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'SWEN-website-builder/1.0 (contact: alfonso.pierantonio@univaq.it)' },
-    });
-    if (!res.ok) {
-      console.warn(`  × DBLP ${pid}: HTTP ${res.status}`);
-      return null;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    let status: number | string;
+    try {
+      const res = await fetch(url, {
+        headers: { 'User-Agent': 'SWEN-website-builder/1.0 (contact: alfonso.pierantonio@univaq.it)' },
+      });
+      if (res.ok) return await res.text();
+      status = res.status;
+      // retry only on rate-limiting / transient server errors
+      if (res.status !== 429 && res.status < 500) {
+        console.warn(`  × DBLP ${pid}: HTTP ${res.status}`);
+        return null;
+      }
+      if (attempt < MAX_ATTEMPTS) {
+        const retryAfter = parseInt(res.headers.get('retry-after') ?? '', 10);
+        const waitMs = Math.min(
+          Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : 3000 * 2 ** (attempt - 1),
+          MAX_WAIT_MS,
+        );
+        console.warn(`  … DBLP ${pid}: HTTP ${res.status}, retry ${attempt}/${MAX_ATTEMPTS - 1} in ${Math.round(waitMs / 1000)}s`);
+        await new Promise((r) => setTimeout(r, waitMs));
+        continue;
+      }
+    } catch (e: any) {
+      status = e.message;
+      if (attempt < MAX_ATTEMPTS) {
+        const waitMs = Math.min(3000 * 2 ** (attempt - 1), MAX_WAIT_MS);
+        console.warn(`  … DBLP ${pid}: ${e.message}, retry ${attempt}/${MAX_ATTEMPTS - 1} in ${Math.round(waitMs / 1000)}s`);
+        await new Promise((r) => setTimeout(r, waitMs));
+        continue;
+      }
     }
-    return await res.text();
-  } catch (e: any) {
-    console.warn(`  × DBLP ${pid}: ${e.message}`);
-    return null;
+    console.warn(`  × DBLP ${pid}: giving up after ${MAX_ATTEMPTS} attempts (last: ${status})`);
   }
+  return null;
 }
 
 function normalizeList<T>(x: T | T[] | undefined): T[] {
@@ -218,15 +246,26 @@ async function main() {
   console.log(`→ Fetching DBLP for ${withPids.length}/${people.length} people with a PID...\n`);
 
   const allPubs: Publication[] = [];
+  const failedPids: string[] = [];
   for (const person of withPids) {
     const pid = person.dblpPid.trim();
     const xml = await fetchPidXml(pid);
-    if (!xml) continue;
+    if (!xml) {
+      failedPids.push(`${person.name} (${pid})`);
+      continue;
+    }
     const pubs = parseDblpXml(xml, person);
     console.log(`  ✓ ${person.name.padEnd(30)} (${pid}) → ${pubs.length} peer-reviewed`);
     allPubs.push(...pubs);
-    // be polite to DBLP
-    await new Promise((r) => setTimeout(r, 300));
+    // be polite to DBLP: ~1.5s between authors keeps us under their rate limit
+    await new Promise((r) => setTimeout(r, 1500));
+  }
+
+  if (failedPids.length > 0) {
+    console.warn(
+      `\n⚠ ${failedPids.length}/${withPids.length} DBLP fetches failed — these authors are MISSING from publications.json:\n` +
+        failedPids.map((f) => `    - ${f}`).join('\n'),
+    );
   }
 
   const unique = dedupe(allPubs).sort((a, b) => b.year - a.year || a.title.localeCompare(b.title));
