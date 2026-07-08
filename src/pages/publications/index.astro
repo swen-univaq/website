@@ -23,8 +23,32 @@ const byYear = pubs.reduce<Record<number, Publication[]>>((acc, p) => {
 }, {});
 const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
 
+/* DBLP author strings can differ from the Notion member names: homonym
+ * suffixes ("Michele Tucci 0001"), casing ("Giordano d'Aloisio"), middle
+ * initials ("Phuong T. Nguyen"). Normalise both sides, then fall back to a
+ * first+last token comparison so SWEN authors are bolded reliably. */
+function normName(s: string): string {
+  return s
+    .replace(/\s+\d{4}$/, '') // DBLP homonym suffix
+    .replace(/[’ʼ`]/g, "'") // uniform apostrophes (Notion may auto-curl them)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // strip diacritics
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+function sameAuthor(a: string, b: string): boolean {
+  const na = normName(a);
+  const nb = normName(b);
+  if (na === nb) return true;
+  const ta = na.split(' ');
+  const tb = nb.split(' ');
+  return ta[0] === tb[0] && ta[ta.length - 1] === tb[tb.length - 1];
+}
 function emphasizeSwen(authors: string[], swen: string[]): string {
-  return authors.map((a) => (swen.includes(a) ? `<strong>${a}</strong>` : a)).join(', ');
+  return authors
+    .map((a) => (swen.some((s) => sameAuthor(a, s)) ? `<strong>${a}</strong>` : a))
+    .join(', ');
 }
 ---
 <Base title="Publications — SWEN" description={`${pubs.length} peer-reviewed publications by SWEN members, auto-fetched from DBLP.`}>
